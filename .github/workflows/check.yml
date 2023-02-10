@@ -20,14 +20,14 @@ jobs:
         with:
           architecture: 'x64'
           python-version: 3.11
-      - name: 🔑 Runtime cache key is calculated.
-        run: |
-          echo "RUNTIME_CACHE_KEY=runtime-ubuntu-${{ hashFiles('poetry.lock') }}-${{ env.CACHE_CUSTOM_KEY }}" >> $GITHUB_ENV
-      - name: 📦 Runtime is cached and restored.
-        id: cache-runtime
-        uses: actions/cache@v3
-        with:
-          key: ${{ env.RUNTIME_CACHE_KEY }}
+#      - name: 🔑 Runtime cache key is calculated.
+#        run: |
+#          echo "RUNTIME_CACHE_KEY=runtime-ubuntu-${{ hashFiles('poetry.lock') }}-${{ env.CACHE_CUSTOM_KEY }}" >> $GITHUB_ENV
+#      - name: 📦 Runtime is cached and restored.
+#        id: cache-runtime
+#        uses: actions/cache@v3
+#        with:
+#          key: ${{ env.RUNTIME_CACHE_KEY }}
           path: |
             ${{ env.pythonLocation }}
             .artifacts/
