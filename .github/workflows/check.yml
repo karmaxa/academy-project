@@ -15,11 +15,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: 🔌 Poetry is installed.
+        run: |
+          pip install poetry==${POETRY_VERSION}
       - name: 🐍 Python runtime is set up.
         uses: actions/setup-python@v4
         with:
           architecture: 'x64'
           python-version: 3.11
+          cache: 'poetry'
+      - name: 🔋 Dependencies are installed.
+        run: poetry install --with dev
+
 #      - name: 🔑 Runtime cache key is calculated.
 #        run: |
 #          echo "RUNTIME_CACHE_KEY=runtime-ubuntu-${{ hashFiles('poetry.lock') }}-${{ env.CACHE_CUSTOM_KEY }}" >> $GITHUB_ENV
@@ -31,14 +38,12 @@ jobs:
 #          path: |
 #            ${{ env.pythonLocation }}
 #            .artifacts/
-      - name: 🔌 Poetry is installed.
-        with:
-          cache: 'poetry'
+
+#        with:
+
 
 #        if: ${{ !steps.cache-runtime.outputs.cache-hit }}
-        run: |
-          pip install poetry==${POETRY_VERSION}
-          poetry install --with dev
+
 #      - name: 🔋 Dependencies are installed.
 #        if: ${{ !steps.cache-runtime.outputs.cache-hit }}
 #        run: poetry install --with dev
