@@ -1,0 +1,15 @@
+version: 2
+
+updates:
+  - package-ecosystem: pip  # poetry
+    assignees:
+      - "karmaxa"
+    directory: "/"
+    schedule:
+      day: "monday"
+      interval: "weekly"
+      time: "06:00"
+    labels:
+      - "auto: dependencies"
+    reviewers:
+      - "karmaxa"
