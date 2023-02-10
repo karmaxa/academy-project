@@ -31,12 +31,16 @@ jobs:
           path: |
             ${{ env.pythonLocation }}
             .artifacts/
-      - name: 🔌 Poetry is installed.
-        if: ${{ !steps.cache-runtime.outputs.cache-hit }}
-        run: pip install poetry==${POETRY_VERSION}
-      - name: 🔋 Dependencies are installed.
-        if: ${{ !steps.cache-runtime.outputs.cache-hit }}
-        run: poetry install --with dev
+        with:
+          cache: 'poetry'
+#      - name: 🔌 Poetry is installed.
+#        if: ${{ !steps.cache-runtime.outputs.cache-hit }}
+          run: |
+            pip install poetry==${POETRY_VERSION}
+            poetry install --with dev
+#      - name: 🔋 Dependencies are installed.
+#        if: ${{ !steps.cache-runtime.outputs.cache-hit }}
+#        run: poetry install --with dev
       - name: 📊 Code check
         run: |
           poetry run black . --check
