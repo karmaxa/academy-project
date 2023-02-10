@@ -16,7 +16,7 @@ jobs:
           architecture: 'x64'
           python-version: 3.11
       - name: 🔌 Poetry is installed.
-        run: pip install poetry==${POETRY_VERSION}
+        run: pip install poetry==1.3.2
       - name: 🔋 Dependencies are installed.
         run: poetry install --with dev
       - name: 📊 Tests are passed.
