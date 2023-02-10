@@ -37,11 +37,9 @@ jobs:
       - name: 🔋 Dependencies are installed.
         if: ${{ !steps.cache-runtime.outputs.cache-hit }}
         run: poetry install --with dev
-      - name: 📊 Black code check
-        run: poetry run black . --check
-      - name: 📊 Isort code check
-        run: poetry run isort . --check-only
-      - name: 📊 mypy code check
-        run: poetry run mypy
-      - name: 📊 flake8 code test
-        run: poetry run 📊 flake8
+      - name: 📊 Code check
+        run: |
+          poetry run black . --check
+          poetry run isort . --check-only
+          poetry run mypy
+          poetry run flake8
