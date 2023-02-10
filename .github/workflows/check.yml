@@ -40,7 +40,7 @@ jobs:
       - name: 📊 Black code check
         run: poetry run black . --check
       - name: 📊 Isort code check
-        run: poetry run isort --check-only
+        run: poetry run isort . --check-only
       - name: 📊 mypy code check
         run: poetry run mypy
       - name: 📊 flake8 code test
