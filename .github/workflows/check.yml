@@ -38,10 +38,10 @@ jobs:
         if: ${{ !steps.cache-runtime.outputs.cache-hit }}
         run: poetry install --with dev
       - name: 📊 Black code check
-        run: black . --check
+        run: poetry run black . --check
       - name: 📊 Isort code check
-        run: isort --check-only
+        run: poetry run isort --check-only
       - name: 📊 mypy code check
-        run: mypy
+        run: poetry run mypy
       - name: 📊 flake8 code test
-        run: 📊 flake8
+        run: poetry run 📊 flake8
