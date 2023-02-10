@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+  
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: 🐍 Python runtime is set up.
+        uses: actions/setup-python@v4
+        with:
+          architecture: 'x64'
+          python-version: 3.11
+      - name: 🔌 Poetry is installed.
+        run: pip install poetry==${POETRY_VERSION}
+      - name: 🔋 Dependencies are installed.
+        run: poetry install --with dev
+      - name: 📊 Tests are passed.
+        run: poetry run task code-lint
+        
