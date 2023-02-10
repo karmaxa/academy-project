@@ -32,7 +32,7 @@ jobs:
             ${{ env.pythonLocation }}
             .artifacts/
           cache: 'poetry'
-#      - name: 🔌 Poetry is installed.
+      - name: 🔌 Poetry is installed.
 #        if: ${{ !steps.cache-runtime.outputs.cache-hit }}
         run: |
           pip install poetry==${POETRY_VERSION}
