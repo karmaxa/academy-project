@@ -4,6 +4,11 @@ on:
   push:
     branches: [ "main" ]
   workflow_dispatch:
+
+env:
+  CACHE_CUSTOM_KEY: 0
+  DATABASE_URL: sqlite:///db.sqlite3
+  POETRY_VERSION: 1.3.2
   
 jobs:
   check:
@@ -15,9 +20,22 @@ jobs:
         with:
           architecture: 'x64'
           python-version: 3.11
+      - name: 🔑 Runtime cache key is calculated.
+        run: |
+          echo "RUNTIME_CACHE_KEY=runtime-ubuntu-${{ hashFiles('poetry.lock') }}-${{ env.CACHE_CUSTOM_KEY }}" >> $GITHUB_ENV
+      - name: 📦 Runtime is cached and restored.
+        id: cache-runtime
+        uses: actions/cache@v3
+        with:
+          key: ${{ env.RUNTIME_CACHE_KEY }}
+          path: |
+            ${{ env.pythonLocation }}
+            .artifacts/
       - name: 🔌 Poetry is installed.
-        run: pip install poetry==1.3.2
+        if: ${{ !steps.cache-runtime.outputs.cache-hit }}
+        run: pip install poetry==${POETRY_VERSION}
       - name: 🔋 Dependencies are installed.
+        if: ${{ !steps.cache-runtime.outputs.cache-hit }}
         run: poetry install --with dev
       - name: 📊 Tests are passed.
         run: poetry run task code-lint
