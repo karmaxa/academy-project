@@ -25,4 +25,5 @@ class Director(models.Model):
             ("edit_user", "Can edit any user"),
             ("create_user", "Can create new users"),
             ("delete user", "Can delete new users"),
+            ("view_students", "Can view all students"),
         ]
