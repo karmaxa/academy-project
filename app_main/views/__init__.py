@@ -1,5 +1,6 @@
 from .auth import *  # noqa: F403
 from .homepage import *  # noqa: F403
+from .logic import *  # noqa: F403
 
 __all__ = (  # noqa: F405
     "LoginView",
@@ -7,4 +8,5 @@ __all__ = (  # noqa: F405
     "UserLogout",
     "HomeView",
     "UserSignUp",
+    "NewUserCreate",
 )

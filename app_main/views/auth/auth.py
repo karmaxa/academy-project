@@ -9,11 +9,11 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model
 from django.contrib.auth import login
 from django.contrib.auth import logout
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 
 from app_main.forms import LogInForm
 from app_main.forms import NewUserForm
+from app_main.views.mixins import LRMixin
 
 User = get_user_model()
 
@@ -55,7 +55,7 @@ class LoginSuccessful(views.View):
             return shortcuts.redirect("/")
 
 
-class UserLogout(LoginRequiredMixin, generic.FormView):
+class UserLogout(LRMixin, generic.FormView):
     template_name = "app_main/logoutpage.html"
     form_class = forms.Form
     success_url = "/"
@@ -72,17 +72,43 @@ class UserSignUp(generic.FormView):
     success_url = "/"
 
     def form_valid(self, form: forms.Form) -> http.HttpResponse:
-        (firstname, lastname, email) = (
+        (firstname, lastname, email, password) = (
             form.cleaned_data["firstname"],
             form.cleaned_data["lastname"],
             form.cleaned_data["email"],
+            form.cleaned_data["password"],
         )
         username: str = lastname + firstname[:2]
-        password: str = "123"
         user = User.objects.create_user(username, email, password)
         user.first_name, user.last_name = firstname, lastname
         user.save()
         # user_to_profile = models.User.objects.get(username=user.username)
         # create_profile(user_to_profile)
+        userli = authenticate(
+            self.request, username=username, password=password
+        )
+        login(request=self.request, user=userli)
         messages.warning(self.request, "successfully signed up")
+        return shortcuts.redirect(self.success_url)
+
+
+class NewUserCreate(LRMixin, generic.FormView):
+    template_name = "app_main/newuser.html"
+    form_class = NewUserForm
+    success_url = "/"
+
+    def form_valid(self, form: forms.Form) -> http.HttpResponse:
+        (firstname, lastname, email, password) = (
+            form.cleaned_data["firstname"],
+            form.cleaned_data["lastname"],
+            form.cleaned_data["email"],
+            form.cleaned_data["password"],
+        )
+        username: str = lastname + firstname[:2]
+        user = User.objects.create_user(username, email, password)
+        user.first_name, user.last_name = firstname, lastname
+        user.save()
+        # user_to_profile = models.User.objects.get(username=user.username)
+        # create_profile(user_to_profile)
+        messages.warning(self.request, "created new user successfully")
         return shortcuts.redirect(self.success_url)

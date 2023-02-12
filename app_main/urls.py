@@ -11,5 +11,6 @@ urlpatterns = [
         "login/success/", views.LoginSuccessful.as_view(), name="loginsuccess"
     ),
     path("logout/", views.UserLogout.as_view(), name="logout"),
-    path("newuser/", views.UserSignUp.as_view(), name="newuser"),
+    path("signup/", views.UserSignUp.as_view(), name="signup"),
+    path("newuser/", views.NewUserCreate.as_view(), name="newuser"),
 ]
