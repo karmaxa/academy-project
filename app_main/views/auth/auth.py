@@ -9,7 +9,6 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model
 from django.contrib.auth import login
 from django.contrib.auth import logout
-from django.db import models
 from django.views import generic
 
 from app_main.forms import LogInForm
@@ -97,7 +96,7 @@ class UserSignUp(generic.FormView):
         user = User.objects.create_user(username, email, password)
         user.first_name, user.last_name = firstname, lastname
         user.save()
-        user_to_profile = models.User.objects.get(username=user.username)
+        user_to_profile = User.objects.get(username=user.username)
         create_profile(user_to_profile)
         userli = authenticate(
             self.request, username=username, password=password

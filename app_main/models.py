@@ -8,8 +8,7 @@ User = get_user_model()
 
 class Student(models.Model):
     user: Any = models.OneToOneField(
-        User, blank=True, null=True, on_delete=models.CASCADE,
-        related_name="+"
+        User, blank=True, null=True, on_delete=models.CASCADE, related_name="+"
     )
     username: Any = models.TextField(
         blank=True,
