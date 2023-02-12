@@ -6,4 +6,5 @@ __all__ = (  # noqa: F405
     "LoginSuccessful",
     "UserLogout",
     "HomeView",
+    "UserSignUp",
 )

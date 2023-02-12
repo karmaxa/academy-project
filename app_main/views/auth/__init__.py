@@ -4,4 +4,5 @@ __all__ = (  # noqa: F405
     "LoginView",
     "LoginSuccessful",
     "UserLogout",
+    "UserSignUp",
 )
