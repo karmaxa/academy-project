@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% block head %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block title %}
+    <title>main</title>
+    {% endblock title %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <style>
+        .link{
+            color: blue;
+        }
+    </style>
+</head>
+    {% endblock head %}
+    {% block head_add %}
+    {% endblock head_add %}
+<body style="background-color: #F8F8F8; height:100vw;">
+    <div class="card">
+        <div class="card-header" style="background-color: white; height: 50px;">
+                {% if user.is_authenticated %}
+                <div class="container" style="max-width:300px; float:right">
+                    <form class="list row g-2 col-12" method="post" action="{% url 'main:logout' %}"style="float: right; display: inline; max-width: 100px;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-warning btn-sm" value="confirm" style="max-width: 100px;">Log out</button>
+                    </form>
+                    <div style="float: right; display: inline; margin-left: 1em; margin-right: 1em; margin-top: 4px;"><h6>{{ acc.first_name }} {{ acc.last_name }}</h6></div>
+                </div>
+            {% else %}
+            <div class="container" style="max-width:300px; float:right">
+                <form class="list row g-2 col-12" method="get" action="{% url 'main:login' %}" style="float: right; display: inline; max-width: 100px;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-warning btn-sm" value="confirm" style=" max-width: 100px;">Log in</button>
+                </form>
+                <div style="float: right; display: inline; width: 1em; margin-left: 1em; margin-right: 1em; margin-top: 4px;"><h6>or</h6></div>
+                <form class="list row g-2 col-12" method="get" action="{% url 'main:signup' %}" style="float: right; display: inline; max-width: 100px;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-warning btn-sm" value="confirm" style=" max-width: 100px;">Sign up</button>
+                </form>
+            </div>
+            {% endif %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-warning" style="float:left; max-width: fit-content; max-height: 40px; margin-bottom: 0; padding: 3px;">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="card-body">
+        {% block content %}
+                <div class="container">
+                    <form class="list row g-2 col-12" method="get" action="{% url 'main:newuser' %}">
+                        <button type="submit" class="btn btn-outline-warning btn-sm" value="confirm" style="max-width: 100px;">Create new user</button>
+                    </form>
+                </div>
+                <div class="container">
+                    <form class="list row g-2 col-12" method="get" action="{% url 'main:users' %}">
+                        <button type="submit" class="btn btn-outline-warning btn-sm" value="confirm" style="max-width: 100px;">Users</button>
+                    </form>
+                </div>
+        {% endblock content %}
+    </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+</body>
+</html>
