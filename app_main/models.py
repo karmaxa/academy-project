@@ -6,7 +6,7 @@ from django.db import models  # noqa: F401
 User = get_user_model()
 
 
-class Student(models.Model):
+class Profile(models.Model):
     user: Any = models.OneToOneField(
         User, blank=True, null=True, on_delete=models.CASCADE, related_name="+"
     )
@@ -33,4 +33,19 @@ class Student(models.Model):
     marks: Any = models.JSONField(
         blank=True,
         null=True,
+    )
+    is_student: Any = models.BooleanField(
+        blank=True,
+        null=True,
+        default=False,
+    )
+    is_teacher: Any = models.BooleanField(
+        blank=True,
+        null=True,
+        default=False,
+    )
+    is_director: Any = models.BooleanField(
+        blank=True,
+        null=True,
+        default=False,
     )

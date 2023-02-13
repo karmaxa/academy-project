@@ -13,7 +13,7 @@ from django.views import generic
 
 from app_main.forms import LogInForm
 from app_main.forms import NewUserForm
-from app_main.models import Student
+from app_main.models import Profile
 from app_main.views.mixins import LRMixin
 
 User = get_user_model()
@@ -67,8 +67,8 @@ class UserLogout(LRMixin, generic.FormView):
         return super().form_valid(form)
 
 
-def create_profile(user: Any) -> None:
-    profile = Student.objects.create(
+def create_profile(user: Any, role: str) -> None:
+    profile = Profile.objects.create(
         username=user.username,
         name=user.first_name,
         lastname=user.last_name,
@@ -77,6 +77,7 @@ def create_profile(user: Any) -> None:
         date=user.date_joined,
         marks={},
     )
+    exec(f"profile.is_{role} = True")  # noqa: S102, DUO105
     profile.save()
 
 
@@ -97,7 +98,7 @@ class UserSignUp(generic.FormView):
         user.first_name, user.last_name = firstname, lastname
         user.save()
         user_to_profile = User.objects.get(username=user.username)
-        create_profile(user_to_profile)
+        create_profile(user_to_profile, "student")
         userli = authenticate(
             self.request, username=username, password=password
         )
@@ -112,17 +113,18 @@ class NewUserCreate(LRMixin, generic.FormView):
     success_url = "/"
 
     def form_valid(self, form: forms.Form) -> http.HttpResponse:
-        (firstname, lastname, email, password) = (
+        (firstname, lastname, email, password, role) = (
             form.cleaned_data["firstname"],
             form.cleaned_data["lastname"],
             form.cleaned_data["email"],
             form.cleaned_data["password"],
+            form.cleaned_data["role"],
         )
         username: str = lastname + firstname[:2]
         user = User.objects.create_user(username, email, password)
         user.first_name, user.last_name = firstname, lastname
         user.save()
         user_to_profile = User.objects.get(username=user.username)
-        create_profile(user_to_profile)
+        create_profile(user_to_profile, role)
         messages.warning(self.request, "created new user successfully")
         return shortcuts.redirect(self.success_url)

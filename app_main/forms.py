@@ -1,5 +1,7 @@
 from django import forms
 
+from app_main.helpers import roles
+
 
 class LogInForm(forms.Form):
     username = forms.CharField(
@@ -28,4 +30,13 @@ class NewUserForm(forms.Form):
     email = forms.EmailField(
         label="Email:",
         widget=forms.EmailInput(attrs={"class": "form-control"}),
+    )
+    role = forms.ChoiceField(
+        label="Role:",
+        choices=roles,
+        widget=forms.Select(
+            attrs={
+                "class": "form-control",
+            }
+        ),
     )
