@@ -40,3 +40,22 @@ class NewUserForm(forms.Form):
             }
         ),
     )
+
+
+class SignUpForm(forms.Form):
+    firstname = forms.CharField(
+        label="First name:",
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
+    lastname = forms.CharField(
+        label="Last name:",
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
+    password = forms.CharField(
+        label="Password:",
+        widget=forms.PasswordInput(attrs={"class": "form-control"}),
+    )
+    email = forms.EmailField(
+        label="Email:",
+        widget=forms.EmailInput(attrs={"class": "form-control"}),
+    )

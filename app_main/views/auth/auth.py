@@ -13,6 +13,7 @@ from django.views import generic
 
 from app_main.forms import LogInForm
 from app_main.forms import NewUserForm
+from app_main.forms import SignUpForm
 from app_main.models import Profile
 from app_main.views.mixins import LRMixin
 
@@ -77,13 +78,13 @@ def create_profile(user: Any, role: str) -> None:
         date=user.date_joined,
         marks={},
     )
-    exec(f"profile.is_{role} = True")  # noqa: S102, DUO105
+    profile.role = role
     profile.save()
 
 
 class UserSignUp(generic.FormView):
     template_name = "app_main/newuser.html"
-    form_class = NewUserForm
+    form_class = SignUpForm
     success_url = "/"
 
     def form_valid(self, form: forms.Form) -> http.HttpResponse:
@@ -110,7 +111,7 @@ class UserSignUp(generic.FormView):
 class NewUserCreate(LRMixin, generic.FormView):
     template_name = "app_main/newuser.html"
     form_class = NewUserForm
-    success_url = "/"
+    success_url = "/users/"
 
     def form_valid(self, form: forms.Form) -> http.HttpResponse:
         (firstname, lastname, email, password, role) = (

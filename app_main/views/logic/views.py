@@ -6,6 +6,6 @@ from app_main.models import Profile
 User = get_user_model()
 
 
-class AllStudentsView(generic.ListView):
-    template_name = "app_main/allstudents.html"
+class AllUsersView(generic.ListView):
+    template_name = "app_main/allusers.html"
     model = Profile

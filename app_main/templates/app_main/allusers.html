@@ -25,6 +25,7 @@
                     <th scope="col">First Name</th>
                     <th scope="col">Second Name</th>
                     <th scope="col">Email</th>
+                    <th scope="col">Role</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -33,6 +34,7 @@
                         <th scope="col">{{ c.name }}</th>
                         <th scope="col">{{ c.lastname }}</th>
                         <th scope="col">{{ c.email }}</th>
+                        <th scope="col">{{ c.role }}</th>
                         <th scope="col" width="20">
                             <form action="{{ c.id }}/update/">
                                 <button type="submit" class="btn btn-outline-primary btn-sm">Update</button>

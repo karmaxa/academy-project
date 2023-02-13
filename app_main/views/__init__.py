@@ -9,5 +9,5 @@ __all__ = (  # noqa: F405
     "HomeView",
     "UserSignUp",
     "NewUserCreate",
-    "AllStudentsView",
+    "AllUsersView",
 )

@@ -34,18 +34,22 @@ class Profile(models.Model):
         blank=True,
         null=True,
     )
-    is_student: Any = models.BooleanField(
+    role: Any = models.TextField(
         blank=True,
         null=True,
-        default=False,
     )
-    is_teacher: Any = models.BooleanField(
-        blank=True,
-        null=True,
-        default=False,
-    )
-    is_director: Any = models.BooleanField(
-        blank=True,
-        null=True,
-        default=False,
-    )
+    # is_student: Any = models.BooleanField(
+    #     blank=True,
+    #     null=True,
+    #     default=False,
+    # )
+    # is_teacher: Any = models.BooleanField(
+    #     blank=True,
+    #     null=True,
+    #     default=False,
+    # )
+    # is_director: Any = models.BooleanField(
+    #     blank=True,
+    #     null=True,
+    #     default=False,
+    # )
