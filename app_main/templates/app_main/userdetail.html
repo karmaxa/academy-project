@@ -1,0 +1,36 @@
+{% extends 'app_main/index.html' %}
+
+{% block content %}
+<div style="height:40px"></div>
+<div class="container" style="margin: top 2em;">
+    <div class="container">
+        <h3>{{object.name}} {{object.lastname}}</h3>
+    </div>
+    <br>
+    <div class="container">
+        <h4>Role:</h4>
+        <div class="input-group input-group-lg">
+            <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" value="{{object.role}}" disabled>
+        </div>
+        <br>
+        {% if object.role == "student" %}
+        <h4>Marks:</h4>
+        <div class="input-group input-group-lg">
+            <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" value="{{object.marks}}" disabled>
+        </div>
+        <br>
+        {% elif object.role == teacher %}
+        <h4>Marks:</h4>
+        <div class="input-group input-group-lg">
+            <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" value="{{object.classes}}" disabled>
+        </div>
+        <br>
+        {% endif %}
+    </div>
+    <div class="mb-3">
+        <a href="{% url 'main:users' %}">back
+        </a>
+    </div>
+</div>
+
+{% endblock content %}

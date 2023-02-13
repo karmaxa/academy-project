@@ -10,4 +10,6 @@ __all__ = (  # noqa: F405
     "UserSignUp",
     "NewUserCreate",
     "AllUsersView",
+    "UserDetailView",
+    "UserDeleteView",
 )

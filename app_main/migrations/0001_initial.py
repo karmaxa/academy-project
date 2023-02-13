@@ -46,6 +46,7 @@ class Migration(migrations.Migration):
                         to=settings.AUTH_USER_MODEL,
                     ),
                 ),
+                ("classes", models.JSONField(blank=True, null=True)),
             ],
         ),
     ]

@@ -48,7 +48,7 @@ class LoginView(generic.FormView):
         return pctx
 
 
-class LoginSuccessful(views.View):
+class LoginSuccessful(LRMixin, views.View):
     def get(self, request: http.HttpRequest) -> http.HttpResponse:
         nextq = request.session.get("next", "")
         if nextq:
@@ -77,8 +77,9 @@ def create_profile(user: Any, role: str) -> None:
         user=user,
         date=user.date_joined,
         marks={},
+        classes=[],
+        role=role,
     )
-    profile.role = role
     profile.save()
 
 
