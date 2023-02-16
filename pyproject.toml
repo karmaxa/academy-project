@@ -11,7 +11,7 @@ anyio = "^3.6.2"
 black = "^23.1.0"
 devtools = {extras = ["pygments"], version = "^0.10.0"}
 dj-database-url = "^1.2.0"
-django = "^4.1.6"
+django = "^4.1.7"
 django-debug-toolbar = "^3.8.1"
 django-extensions = "^3.2.1"
 django-filter = "^22.1"
