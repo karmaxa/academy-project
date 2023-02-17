@@ -45,7 +45,7 @@ class Profile(models.Model):
         null=True,
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return " ".join([self.name, self.lastname])
 
 
@@ -62,22 +62,26 @@ class ClassRoom(models.Model):
         on_delete=models.SET_NULL,
     )
     student: Any = models.ManyToManyField(
-        User, blank=True,
+        User,
+        blank=True,
     )
     lessons: Any = models.JSONField(
-        blank=True, null=True, default=[],
+        blank=True,
+        null=True,
+        default=[],
     )
     slug: Any = models.SlugField(
-        blank=True, null=True,
+        blank=True,
+        null=True,
     )
 
-    def __str__(self):
+    def __str__(self) -> Any:
         return self.name
 
-    def get_absolute_url(self):
+    def get_absolute_url(self, *args: Any, **kwargs: Any) -> str:
         return urls.reverse("classroom", kwargs={"slug": self.slug})
 
-    def save(self):
+    def save(self, *args: Any, **kwargs: Any) -> None:
         if not self.slug:
             self.slug = slugify(self.name)
         return super().save()

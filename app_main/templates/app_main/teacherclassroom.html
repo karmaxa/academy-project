@@ -32,20 +32,21 @@
                     </td>
                     {% for lesson in classroom.lessons %}
                     <input type="hidden" id="{{student.name}}" value="{{student}}">
-                    <!-- <script>
-                        let stname = "{{student.name}}";
-                        document.write(stname)
-                        let stud = document.getElementById(stname).value;
-                        let lesname = "{{lesson.title}}";
-                        document.write(stud);
-                        document.write(lesname);
-                        document.write(stud.lesname);
-                        st = JSON.parse(stud);
-                        document.getElementById(st.name + "_" + lesname).innerHTML = st.les;
-                    </script> -->
-                    <td id="{{student.name}}_{{lesson.title}}">
-                        {{student.lesson}}
+                    <td>
+                        <p id="{{student.identifier}}_{{lesson.title}}"></p>
                     </td>
+                    <script>
+                        stname = "{{student.name}}";
+                        stid = "{{student.identifier}}";
+                        stud = document.getElementById(stname).value;
+                        stud = stud.replace(/'/g, '"');
+                        lesname = "{{lesson.title}}";
+                        st = JSON.parse(stud);
+                        mark = st[lesname]
+                        idd = String(stid + "_" + lesname)
+                        doc = document.getElementById(idd);
+                        doc.innerHTML = mark;
+                    </script>
                     {% endfor %}
                     <td>
                         <select>
