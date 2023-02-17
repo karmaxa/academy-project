@@ -1,7 +1,9 @@
 from typing import Any
 
+from django import urls
 from django.contrib.auth import get_user_model
 from django.db import models  # noqa: F401
+from django.template.defaultfilters import slugify
 
 User = get_user_model()
 
@@ -42,3 +44,40 @@ class Profile(models.Model):
         blank=True,
         null=True,
     )
+
+    def __str__(self):
+        return " ".join([self.name, self.lastname])
+
+
+class ClassRoom(models.Model):
+    name: Any = models.TextField(
+        blank=True,
+        null=True,
+    )
+    teacher: Any = models.ForeignKey(
+        User,
+        blank=True,
+        null=True,
+        related_name="+",
+        on_delete=models.SET_NULL,
+    )
+    student: Any = models.ManyToManyField(
+        User, blank=True,
+    )
+    lessons: Any = models.JSONField(
+        blank=True, null=True, default=[],
+    )
+    slug: Any = models.SlugField(
+        blank=True, null=True,
+    )
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return urls.reverse("classroom", kwargs={"slug": self.slug})
+
+    def save(self):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        return super().save()

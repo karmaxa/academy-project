@@ -12,4 +12,5 @@ __all__ = (  # noqa: F405
     "AllUsersView",
     "UserDetailView",
     "UserDeleteView",
+    "ClassRoomView",
 )

@@ -1,0 +1,68 @@
+{% extends 'app_main/index.html' %}
+
+{% block content %}
+<div style="height:40px"></div>
+<div class="container" style="margin: top 2em;">
+    <div class="container">
+        class: {{classroom}}<br>
+        teacher: {{classroom.teacher}}<br>
+        students: {{students}}<br>
+        lessons: {{classroom.lessons}}<br>
+    </div>
+    <div class="container">
+        <table class="table table-sm table-bordered" style="width: fit-content; text-align: left;">
+            <thead>
+                <tr style="vertical-align: middle;">
+                    <th scope="col">Students</th>
+                    {% for lesson in lessons %}
+                    <th scope="col">{{lesson.title}}:<br>{{lesson.date}}</th>
+                    {% endfor %}
+                    <th scope="col">
+                        <form action="add/" method="POST">
+                            <button type="submit" class="btn btn-outline-primary btn-sm">Add lesson</button>
+                    </th>
+                </tr>
+            </thead>
+            <form action="submit/" method="POST">
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>
+                        {{student.name}}
+                    </td>
+                    {% for lesson in classroom.lessons %}
+                    <input type="hidden" id="{{student.name}}" value="{{student}}">
+                    <!-- <script>
+                        let stname = "{{student.name}}";
+                        document.write(stname)
+                        let stud = document.getElementById(stname).value;
+                        let lesname = "{{lesson.title}}";
+                        document.write(stud);
+                        document.write(lesname);
+                        document.write(stud.lesname);
+                        st = JSON.parse(stud);
+                        document.getElementById(st.name + "_" + lesname).innerHTML = st.les;
+                    </script> -->
+                    <td id="{{student.name}}_{{lesson.title}}">
+                        {{student.lesson}}
+                    </td>
+                    {% endfor %}
+                    <td>
+                        <select>
+                            <option selected disabled></option>
+                            {% for mark in marks %}
+                            <option>
+                                {{mark}}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock content %}
+</form>

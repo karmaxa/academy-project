@@ -20,4 +20,7 @@ urlpatterns = [
         views.UserDeleteView.as_view(),
         name="userdelete",
     ),
+    path(
+        "classes/<slug:slug>/", views.ClassRoomView.as_view(), name="classroom"
+    ),
 ]
