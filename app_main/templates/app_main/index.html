@@ -55,9 +55,16 @@
                         <button type="submit" class="btn btn-outline-warning btn-sm" value="confirm" style="max-width: 100px;">Create new user</button>
                     </form>
                 </div>
+                <br>
                 <div class="container">
                     <form class="list row g-2 col-12" method="get" action="{% url 'main:users' %}">
                         <button type="submit" class="btn btn-outline-warning btn-sm" value="confirm" style="max-width: 100px;">Users</button>
+                    </form>
+                </div>
+                <br>
+                <div class="container">
+                    <form class="list row g-2 col-12" method="get" action="{% url 'main:classrooms' %}">
+                        <button type="submit" class="btn btn-outline-warning btn-sm" value="confirm" style="max-width: 100px;">Classrooms</button>
                     </form>
                 </div>
         {% endblock content %}

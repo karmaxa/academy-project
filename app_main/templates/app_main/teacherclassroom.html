@@ -8,6 +8,7 @@
         teacher: {{classroom.teacher}}<br>
         students: {{students}}<br>
         lessons: {{classroom.lessons}}<br>
+        today: {{today}}<br>
     </div>
     <div class="container">
         <table class="table table-sm table-bordered" style="width: fit-content; text-align: left;">
@@ -15,15 +16,20 @@
                 <tr style="vertical-align: middle;">
                     <th scope="col">Students</th>
                     {% for lesson in lessons %}
-                    <th scope="col">{{lesson.title}}:<br>{{lesson.date}}</th>
+                    <th scope="col">{{lesson.date}}<hr style="margin: 0;">{{lesson.title}}</th>
                     {% endfor %}
+                    <form action="addlesson/" method="POST">
+                    {% csrf_token %}
                     <th scope="col">
-                        <form action="add/" method="POST">
-                            <button type="submit" class="btn btn-outline-primary btn-sm">Add lesson</button>
+                        <input type="date" name="newlesson_date" value="{{today}}">
+                        <hr style="margin: 0;">
+                        <input type="text" name="newlesson_title" value="{{newles_title}}">
+                    </th>
+                    <th>
+                        <button type="submit" class="btn btn-outline-primary btn-sm">Commit lesson</button>
                     </th>
                 </tr>
             </thead>
-            <form action="submit/" method="POST">
             <tbody>
                 {% for student in students %}
                 <tr>
@@ -42,14 +48,17 @@
                         stud = stud.replace(/'/g, '"');
                         lesname = "{{lesson.title}}";
                         st = JSON.parse(stud);
-                        mark = st[lesname]
+                        mark = st[lesname];
+                        if (mark === "null"){
+                            mark = null;
+                        }
                         idd = String(stid + "_" + lesname)
                         doc = document.getElementById(idd);
                         doc.innerHTML = mark;
                     </script>
                     {% endfor %}
-                    <td>
-                        <select>
+                    <td colspan="2">
+                        <select name="{{student.identifier}}_newlesson">
                             <option selected disabled></option>
                             {% for mark in marks %}
                             <option>
@@ -60,10 +69,14 @@
                     </td>
                 </tr>
                 {% endfor %}
+            </form>
             </tbody>
         </table>
+    </div>
+    <div class="mb-3">
+        <a href="../">back
+        </a>
     </div>
 </div>
 
 {% endblock content %}
-</form>
