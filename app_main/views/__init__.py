@@ -1,5 +1,5 @@
 from .auth import *  # noqa: F403
-from .homepage import *  # noqa: F403
+from .homepage import HomeView
 from .logic import *  # noqa: F403
 
 __all__ = (  # noqa: F405

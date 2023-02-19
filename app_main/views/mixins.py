@@ -7,9 +7,14 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import AccessMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.views.generic.detail import SingleObjectMixin
 
 from app_main.helpers import roles_priorities
 from app_main.models import Profile
+from app_main.views.logic.helpers import get_current_student
+from app_main.views.logic.helpers import get_user_classrooms
+from app_main.views.logic.helpers import get_user_profile
+from app_main.views.logic.helpers import get_user_role
 
 User = get_user_model()
 
@@ -52,3 +57,42 @@ class RoleUPTMixin(UserPassesTestMixin, AuthHelperMixin):
         prf_rl = prf.role
         prf_rl_prior = roles_priorities[prf_rl]
         return prf_rl_prior >= roles_priorities[self.role_required]
+
+
+class ProfileSingleObjectMixin(LRMixin, SingleObjectMixin):
+    def handle_no_permission(  # type: ignore
+        self, *args: Any
+    ) -> http.HttpResponseRedirect:
+        u_role = get_user_role(self.request)  # type: ignore
+        if u_role != "director":
+            u_profile = get_user_profile(self.request, "self")  # type: ignore
+            if u_profile.user != self.request.user:  # type: ignore
+                return super().handle_no_permission(self, "permission")
+
+    def get_object(self, queryset=None) -> Any:  # type: ignore
+        if not self.request.resolver_match.kwargs.get("pk"):  # type: ignore
+            return get_user_profile(self.request, "self")  # type: ignore
+        else:
+            return super().get_object()
+
+    def get_context_data(self, **kwargs: dict) -> Any:
+        ctx = super().get_context_data()
+        if self.request.resolver_match.kwargs.get("pk"):  # type: ignore
+            classrooms = get_user_classrooms(
+                self.request, "path"  # type: ignore
+            )
+            ctx["classrooms"] = classrooms
+            current_student = get_current_student(
+                self.request, None, "path"  # type: ignore
+            )
+            ctx["current_student"] = current_student
+        else:
+            classrooms = get_user_classrooms(
+                self.request, "self"  # type: ignore
+            )
+            ctx["classrooms"] = classrooms
+            current_student = get_current_student(
+                self.request, None, "self"  # type: ignore
+            )
+            ctx["current_student"] = current_student
+        return ctx

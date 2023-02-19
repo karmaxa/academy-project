@@ -74,7 +74,6 @@ def create_profile(user: Any, role: str) -> None:
         username=user.username,
         name=user.first_name,
         lastname=user.last_name,
-        email=user.email,
         user=user,
         date=user.date_joined,
         marks={},
@@ -89,14 +88,13 @@ class UserSignUp(generic.FormView):
     success_url = "/"
 
     def form_valid(self, form: forms.Form) -> http.HttpResponse:
-        (firstname, lastname, email, password) = (
+        (username, firstname, lastname, password) = (
+            form.cleaned_data["username"],
             form.cleaned_data["firstname"],
             form.cleaned_data["lastname"],
-            form.cleaned_data["email"],
             form.cleaned_data["password"],
         )
-        username: str = lastname + firstname[:2]
-        user = User.objects.create_user(username, email, password)
+        user = User.objects.create_user(username, password)
         user.first_name, user.last_name = firstname, lastname
         user.save()
         user_to_profile = User.objects.get(username=user.username)
@@ -117,15 +115,14 @@ class NewUserCreate(LRMixin, RoleUPTMixin, generic.FormView):
     success_url = "/users/"
 
     def form_valid(self, form: forms.Form) -> http.HttpResponse:
-        (firstname, lastname, email, password, role) = (
+        (username, firstname, lastname, password, role) = (
+            form.cleaned_data["username"],
             form.cleaned_data["firstname"],
             form.cleaned_data["lastname"],
-            form.cleaned_data["email"],
             form.cleaned_data["password"],
             form.cleaned_data["role"],
         )
-        username: str = lastname + firstname[:2]
-        user = User.objects.create_user(username, email, password)
+        user = User.objects.create_user(username, password)
         user.first_name, user.last_name = firstname, lastname
         user.save()
         user_to_profile = User.objects.get(username=user.username)
