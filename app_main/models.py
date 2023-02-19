@@ -35,6 +35,7 @@ class Profile(models.Model):
     marks: Any = models.JSONField(
         blank=True,
         null=True,
+        default={},
     )
     role: Any = models.TextField(
         blank=True,

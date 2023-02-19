@@ -11,14 +11,18 @@
         today: {{today}}<br>
     </div>
     <div class="container">
+        <form action="addlesson/" method="POST">
         <table class="table table-sm table-bordered" style="width: fit-content; text-align: left;">
             <thead>
                 <tr style="vertical-align: middle;">
                     <th scope="col">Students</th>
                     {% for lesson in lessons %}
-                    <th scope="col">{{lesson.date}}<hr style="margin: 0;">{{lesson.title}}</th>
+                    <th scope="col">
+                        <input type="date" name="{{lesson.title}}_date" value="{{lesson.dateform}}">
+                        <hr style="margin: 0;">
+                        <input type="text" name="{{lesson.title}}_title" value="{{lesson.title}}">
+                    </th>
                     {% endfor %}
-                    <form action="addlesson/" method="POST">
                     {% csrf_token %}
                     <th scope="col">
                         <input type="date" name="newlesson_date" value="{{today}}">
@@ -26,7 +30,7 @@
                         <input type="text" name="newlesson_title" value="{{newles_title}}">
                     </th>
                     <th>
-                        <button type="submit" class="btn btn-outline-primary btn-sm">Commit lesson</button>
+                        <button type="submit" class="btn btn-outline-primary btn-sm" name="newlesson" value="True">Commit lesson</button>
                     </th>
                 </tr>
             </thead>
@@ -39,27 +43,35 @@
                     {% for lesson in classroom.lessons %}
                     <input type="hidden" id="{{student.name}}" value="{{student}}">
                     <td>
-                        <p id="{{student.identifier}}_{{lesson.title}}"></p>
+                        <select class="select" name="{{student.identifier}}_lesson{{lesson.id}}">
+                            <option selected id="{{student.identifier}}_lesson{{lesson.id}}"></option>
+                            <option></option>
+                            {% for mark in marks %}
+                            <option>
+                                {{mark}}
+                            </option>
+                            {% endfor %}
+                        </select>
                     </td>
                     <script>
                         stname = "{{student.name}}";
                         stid = "{{student.identifier}}";
                         stud = document.getElementById(stname).value;
                         stud = stud.replace(/'/g, '"');
-                        lesname = "{{lesson.title}}";
+                        lesid = "{{lesson.id}}";
                         st = JSON.parse(stud);
-                        mark = st[lesname];
+                        mark = st[lesid];
                         if (mark === "null"){
                             mark = null;
                         }
-                        idd = String(stid + "_" + lesname)
-                        doc = document.getElementById(idd);
-                        doc.innerHTML = mark;
+                        idd = String(stid + "_lesson" + lesid)
+                        el = document.getElementById(idd);
+                        el.innerHTML = mark;
                     </script>
                     {% endfor %}
                     <td colspan="2">
                         <select name="{{student.identifier}}_newlesson">
-                            <option selected disabled></option>
+                            <option selected></option>
                             {% for mark in marks %}
                             <option>
                                 {{mark}}
@@ -69,9 +81,13 @@
                     </td>
                 </tr>
                 {% endfor %}
-            </form>
+            
             </tbody>
         </table>
+        <div class="container">
+            <button type="submit" class="btn btn-outline-primary btn-sm" name="commitchanges" value="True">Commit changes</button>
+        </div>
+    </form>
     </div>
     <div class="mb-3">
         <a href="../">back
