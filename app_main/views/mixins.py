@@ -8,6 +8,7 @@ from django.contrib.auth.mixins import AccessMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import UserPassesTestMixin
 
+from app_main.helpers import roles_priorities
 from app_main.models import Profile
 
 User = get_user_model()
@@ -49,4 +50,5 @@ class RoleUPTMixin(UserPassesTestMixin, AuthHelperMixin):
             return 1
         prf = Profile.objects.get(user_id=usr.pk)
         prf_rl = prf.role
-        return prf_rl == self.role_required
+        prf_rl_prior = roles_priorities[prf_rl]
+        return prf_rl_prior >= roles_priorities[self.role_required]

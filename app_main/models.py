@@ -35,13 +35,9 @@ class Profile(models.Model):
     marks: Any = models.JSONField(
         blank=True,
         null=True,
-        default={},
+        default=dict,
     )
     role: Any = models.TextField(
-        blank=True,
-        null=True,
-    )
-    classes: Any = models.JSONField(
         blank=True,
         null=True,
     )
@@ -69,7 +65,7 @@ class ClassRoom(models.Model):
     lessons: Any = models.JSONField(
         blank=True,
         null=True,
-        default=[],
+        default=list,
     )
     slug: Any = models.SlugField(
         blank=True,

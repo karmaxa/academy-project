@@ -20,6 +20,11 @@ urlpatterns = [
         views.UserDeleteView.as_view(),
         name="userdelete",
     ),
+    path(
+        "users/<int:pk>/edit/",
+        views.UserUpdateView.as_view(),
+        name="useredit",
+    ),
     path("classes/", views.ClassesView.as_view(), name="classrooms"),
     path(
         "classes/<slug:slug>/", views.ClassRoomView.as_view(), name="classroom"

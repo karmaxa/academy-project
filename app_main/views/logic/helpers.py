@@ -2,6 +2,7 @@ from typing import Any
 from typing import Optional
 
 from django import http
+from django.db.models import QuerySet
 
 from app_main import models
 
@@ -151,34 +152,77 @@ def get_lessons_and_newlesid(classroom: models.ClassRoom) -> tuple[list, int]:
     return lessons, l_count
 
 
-def get_user_profile(request: http.HttpRequest) -> models.Profile:
-    upk = request.user.id
-    uprof = models.Profile.objects.get(user_id=upk)  # type: ignore
+def get_user_profile(request: http.HttpRequest, param: str) -> models.Profile:
+    if param == "self":
+        upk = request.user.id
+        uprof = models.Profile.objects.get(user_id=upk)  # type: ignore
+    if param == "path":
+        profile_pk = request.resolver_match.kwargs["pk"]  # type: ignore
+        uprof = models.Profile.objects.get(id=profile_pk)
     return uprof
 
 
 def get_user_role(request: http.HttpRequest) -> Any:
     if request.user.is_superuser or request.user.is_staff:
         return "director"
-    uprof = get_user_profile(request)
+    uprof = get_user_profile(request, "self")
     role = uprof.role
     return role
 
 
-def get_current_student(
-    request: http.HttpRequest, classroom: models.ClassRoom
-) -> Optional[dict]:
-    user_profile = get_user_profile(request)
-
-    if user_profile.role != "student":
-        return None
-
+def build_student_marks_to_response(
+    user_profile: models.Profile, classroom: models.ClassRoom
+) -> dict:
     mks = {
         str(les["id"]): user_profile.marks.get(classroom.name, {}).get(
             str(les["id"])
         )
         for les in classroom.lessons
     }
+    return mks
+
+
+def get_current_student(
+    request: http.HttpRequest, classroom: Optional[models.ClassRoom]
+) -> Optional[dict]:
+    param: str = "self" if classroom else "path"
+    user_profile = get_user_profile(request, param)
+
+    if user_profile.role != "student":
+        return None
+
+    if not classroom:
+        current_student = build_current_student(request, user_profile)
+
+    else:
+        current_student = build_classroom_current_student(
+            classroom, user_profile
+        )
+    return current_student
+
+
+def build_current_student(
+    request: http.HttpRequest, user_profile: models.Profile
+) -> dict:
+    classes: dict = {}
+    classrooms = get_user_classrooms(request)
+    for classroom in classrooms:
+        mks = build_student_marks_to_response(user_profile, classroom)
+        for lsn in mks:
+            if mks[lsn] is None:
+                mks[lsn] = "null"
+        classes[classroom.name] = mks
+    current_student = {
+        "name": user_profile.__str__(),
+        "identifier": user_profile.name + user_profile.lastname,
+    } | classes
+    return current_student
+
+
+def build_classroom_current_student(
+    classroom: models.ClassRoom, user_profile: models.Profile
+) -> dict:
+    mks = build_student_marks_to_response(user_profile, classroom)
     for lsn in mks:
         if mks[lsn] is None:
             mks[lsn] = "null"
@@ -187,3 +231,14 @@ def get_current_student(
         "identifier": user_profile.name + user_profile.lastname,
     } | mks
     return current_student
+
+
+def get_user_classrooms(request: http.HttpRequest) -> QuerySet:
+    profile = get_user_profile(request, "path")
+    urole = profile.role
+    upk = profile.user.id
+    if urole == "teacher" or urole == "director":
+        classrooms = models.ClassRoom.objects.filter(teacher__id=upk)
+    elif urole == "student":
+        classrooms = models.ClassRoom.objects.filter(student__id=upk)
+    return classrooms

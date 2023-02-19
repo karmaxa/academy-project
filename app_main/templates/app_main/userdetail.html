@@ -8,24 +8,86 @@
     </div>
     <br>
     <div class="container">
+        <h4>Username:</h4>
+        <div class="input-group input-group-lg">
+            <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" value="{{object.username}}" disabled>
+        </div>
+        <br>
+        <h4>Name:</h4>
+        <div class="input-group input-group-lg">
+            <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" value="{{object.name}}" disabled>
+        </div>
+        <br>
+        <h4>Last name:</h4>
+        <div class="input-group input-group-lg">
+            <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" value="{{object.lastname}}" disabled>
+        </div>
+        <br>
+        <h4>E-mail:</h4>
+        <div class="input-group input-group-lg">
+            <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" value="{{object.email}}" disabled>
+        </div>
+        <br>
         <h4>Role:</h4>
         <div class="input-group input-group-lg">
             <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" value="{{object.role}}" disabled>
         </div>
         <br>
-        {% if object.role == "student" %}
-        <h4>Marks:</h4>
+        <h4>Classrooms:</h4>
         <div class="input-group input-group-lg">
-            <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" value="{{object.marks}}" disabled>
+            <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" value="{{classrooms}}" disabled>
         </div>
         <br>
-        {% elif object.role == teacher %}
-        <h4>Marks:</h4>
-        <div class="input-group input-group-lg">
-            <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" value="{{object.classes}}" disabled>
-        </div>
+        {% if object.role == 'student' %}
+    
+        <ol style="list-style-type: none;"><h4>Marks:</h4>
         <br>
-        {% endif %}
+            {% for classroom in classrooms %}
+                <div class="container">
+                    <li>
+                    <h5>
+                        <a href="#collapse{{classroom.name}}", data-bs-toggle="collapse", aria-controls="collapse{{classroom.name}}" role="button", class="btn btn_primary" aria-expanded="false" style="border: 1px solid blue; color: blue;">
+                                {{classroom.name}}
+                        </a>
+                    </h5>
+                </div>
+                    <div class="container" style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: wrap;">
+                    {% for lesson in classroom.lessons %}
+                    <input type="hidden" id="{{current_student.name}}" value="{{current_student}}">
+                    <div class="collapse list" id="collapse{{classroom.name}}">
+                        <div class="container border border-primary border-2 rounded-3" style="height: 100px; width: 120px; margin: 10px; padding-left: 0;">
+                            <h6 class="text-muted" style="margin: 0;">{{lesson.date}}</h6>
+                            <h6 style="margin: 0;">{{lesson.title}}</h6>
+                            <div class="container" style="width: 100%; display:flex; justify-content: flex-end;" id="class_{{classroom.id}}_lesson{{lesson.id}}">
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        classroomname = "{{classroom.name}}";
+                        classroomid = "{{classroom.id}}";
+                        stname = "{{current_student.name}}";
+                        stid = "{{current_student.identifier}}";
+                        stud = document.getElementById(stname).value;
+                        stud = stud.replace(/'/g, '"');
+                        lesid = "{{lesson.id}}";
+                        st = JSON.parse(stud);
+                        mark = st[classroomname][lesid];
+                        // if (mark == "NA"){
+                        //     mark = "NA";
+                        // }
+                        idd = String("class_" + classroomid + "_lesson" + lesid);
+                        el = document.getElementById(idd);
+                        if (mark){
+                            el.innerHTML = '<button class="btn btn-outline-primary btn-lg" disabled style="font-weight: 600; border-width: 2px; font-size: x-large;">' + mark + '</button>';
+                        }
+                    </script>
+                    {% endfor %}
+                </div>
+                </li>
+                {% endfor %}
+        </ol>
+    {% endif %}
+    <br>
     </div>
     <div class="mb-3">
         <a href="../">back

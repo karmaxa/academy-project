@@ -78,7 +78,6 @@ def create_profile(user: Any, role: str) -> None:
         user=user,
         date=user.date_joined,
         marks={},
-        classes=[],
         role=role,
     )
     profile.save()

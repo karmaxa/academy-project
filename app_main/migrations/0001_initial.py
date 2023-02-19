@@ -34,7 +34,10 @@ class Migration(migrations.Migration):
                     models.EmailField(blank=True, max_length=254, null=True),
                 ),
                 ("date", models.DateTimeField(blank=True, null=True)),
-                ("marks", models.JSONField(blank=True, null=True, default={})),
+                (
+                    "marks",
+                    models.JSONField(blank=True, null=True, default=dict),
+                ),
                 ("role", models.TextField(blank=True, null=True)),
                 (
                     "user",
@@ -46,7 +49,6 @@ class Migration(migrations.Migration):
                         to=settings.AUTH_USER_MODEL,
                     ),
                 ),
-                ("classes", models.JSONField(blank=True, null=True)),
             ],
         ),
     ]

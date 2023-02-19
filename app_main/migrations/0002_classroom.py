@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
                 ("name", models.TextField(blank=True, null=True)),
                 (
                     "lessons",
-                    models.JSONField(blank=True, null=True, default=[]),
+                    models.JSONField(blank=True, null=True, default=list),
                 ),
                 ("slug", models.SlugField(blank=True, null=True)),
                 (
