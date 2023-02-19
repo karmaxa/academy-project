@@ -26,7 +26,7 @@ urlpatterns = [
     ),
     path(
         "classes/<slug:slug>/addlesson/",
-        views.ClassRoomAddLesson.as_view(),
+        views.ClassRoomEdit.as_view(),
         name="addlesson",
     ),
 ]
