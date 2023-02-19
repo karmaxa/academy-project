@@ -151,9 +151,42 @@ def get_lessons_and_newlesid(classroom: models.ClassRoom) -> tuple[list, int]:
     return lessons, l_count
 
 
+def get_user_profile(request: http.HttpRequest) -> models.Profile:
+    upk = request.user.id
+    uprof = models.Profile.objects.get(user_id=upk)  # type: ignore
+    # role = uprof.role
+    # if request.user.is_superuser or request.user.is_staff:
+    #     role: str = "director"
+    return uprof
+
+
 def get_user_role(request: http.HttpRequest) -> Any:
     if request.user.is_superuser or request.user.is_staff:
         return "director"
-    upk = request.user.id
-    uprof = models.Profile.objects.get(user_id=upk)  # type: ignore
-    return uprof.role
+    uprof = get_user_profile(request)
+    role = uprof.role
+    return role
+
+
+def get_current_student(
+    request: http.HttpRequest, classroom: models.ClassRoom
+) -> Optional[dict]:
+    user_profile = get_user_profile(request)
+
+    if user_profile.role != "student":
+        return None
+
+    mks = {
+        str(les["id"]): user_profile.marks.get(classroom.name, {}).get(
+            str(les["id"])
+        )
+        for les in classroom.lessons
+    }
+    for lsn in mks:
+        if mks[lsn] is None:
+            mks[lsn] = "null"
+    current_student = {
+        "name": user_profile.__str__(),
+        "identifier": user_profile.name + user_profile.lastname,
+    } | mks
+    return current_student

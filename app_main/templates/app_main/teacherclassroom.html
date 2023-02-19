@@ -2,7 +2,11 @@
 
 {% block content %}
 <div style="height:40px"></div>
+<div class="container">
+    <h3>{{classroom.name}}</h3>
+</div>
 <div class="container" style="margin: top 2em; ">
+    {% if user_role == 'teacher' or user_role == 'director' %}
     <form action="editlesson/" method="POST">
     <div class="container table-responsive" style="padding: 0;" role="region">
         <table class="table table-sm table-bordered table-striped marks-table" style="width: fit-content; text-align: left; table-layout: fixed; margin: 0;">
@@ -22,11 +26,13 @@
                     </th>
                     {% endfor %}
                     {% csrf_token %}
+                    {% if user_role == 'director' or classroom.teacher_id == user.id %}
                     <th scope="col" style="width: 122px; z-index: 1;">
                         <input type="date" class="form-control form-control-sm date" name="newlesson_date" value="{{today}}" style="background-color: inherit; font-weight: 600;">
                         <input type="text" class="form-control form-control-sm" name="newlesson_title" value="{{newles_title}}" style="background-color: inherit; font-weight: 600;">
                         <button type="submit" class="btn btn-outline-primary btn-sm" name="newlesson" value="True" style="font-weight: 600;">Commit lesson</button>
                     </th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -49,7 +55,7 @@
                             {% endfor %}
                         </select>
                         {% else %}
-                        <select class="form-control form-control-sm select" name="{{student.identifier}}_lesson{{lesson.id}}" disabled style="width: 2em;">
+                        <select class="form-control form-control-sm select" name="{{student.identifier}}_lesson{{lesson.id}}" disabled style="background-color: inherit; color: inherit; font-weight:bolder; text-align: center; font-size: large;">
                             <option selected id="{{student.identifier}}_lesson{{lesson.id}}"></option>
                         </select>
                         {% endif %}
@@ -70,6 +76,7 @@
                         el.innerHTML = mark;
                     </script>
                     {% endfor %}
+                    {% if user_role == 'director' or classroom.teacher_id == user.id %}
                     <td colspan="2">
                         <select class="form-control form-control-sm" name="{{student.identifier}}_newlesson" style="background-color:rgb(230, 230, 230); color: inherit; font-weight:bolder; text-align: center; font-size: large;">
                             <option selected></option>
@@ -80,6 +87,7 @@
                             {% endfor %}
                         </select>
                     </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -93,6 +101,37 @@
         <br>
         {% endif %}
     </form>
+    {% elif user_role == 'student' %}
+    <h4>{{current_student.name}}</h4>
+    <div class="container" style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: wrap;">
+        {% for lesson in lessons %}
+        <input type="hidden" id="{{current_student.name}}" value="{{current_student}}">
+        <div class="container border border-primary border-2 rounded-3" style="height: 100px; width: 120px; margin: 10px; padding-left: 0;">
+            <h6 class="text-muted" style="margin: 0;">{{lesson.date}}</h6>
+            <h6 style="margin: 0;">{{lesson.title}}</h6>
+            <div class="container" style="width: 100%; display:flex; justify-content: flex-end;" id="{{current_student.identifier}}_lesson{{lesson.id}}">
+            </div>
+        </div>
+        <script>
+            stname = "{{current_student.name}}";
+            stid = "{{current_student.identifier}}";
+            stud = document.getElementById(stname).value;
+            stud = stud.replace(/'/g, '"');
+            lesid = "{{lesson.id}}";
+            st = JSON.parse(stud);
+            mark = st[lesid];
+            if (mark == "null"){
+                mark = null;
+            }
+            idd = String(stid + "_lesson" + lesid)
+            el = document.getElementById(idd);
+            if (mark){
+                el.innerHTML = '<button class="btn btn-outline-primary btn-lg" disabled style="font-weight: 600; border-width: 2px; font-size: x-large;">' + mark + '</button>';
+            }
+        </script>
+        {% endfor %}
+    </div>
+    {% endif %}
     <div class="mb-3">
         <a href="../">back
         </a>

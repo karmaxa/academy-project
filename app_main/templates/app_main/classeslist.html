@@ -9,7 +9,11 @@
     <div class="container">
         <div class="container">
             {% for o in object_list %}
-            <a href="{{o.name}}/">{{o.name}}</a>
+            <div class="container">
+                <form action="{{o.name}}/">
+                    <button type="submit" class="btn btn-outline-primary btn-lg">{{o.name}}</button>
+                </form>
+            </div>
             {% endfor %}
         </div>
     </div>

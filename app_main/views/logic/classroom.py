@@ -33,6 +33,8 @@ class ClassRoomView(LRMixin, generic.DetailView):
 
         user_role = helpers.get_user_role(request)
 
+        current_student = helpers.get_current_student(request, classroom)
+
         response = shortcuts.render(
             self.request,
             "app_main/teacherclassroom.html",
@@ -44,6 +46,7 @@ class ClassRoomView(LRMixin, generic.DetailView):
                 "newles_title": "lesson" + str(l_count),
                 "today": datetime.date.today().strftime("%Y-%m-%d"),
                 "user_role": user_role,
+                "current_student": current_student,
             },
         )
         return response
