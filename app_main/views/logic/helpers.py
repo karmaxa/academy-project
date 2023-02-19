@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django import http
 
 from app_main import models
@@ -66,6 +68,40 @@ def edit_classroom(
             )
             student.save()
     classroom.save()
+
+
+def delete_lesson(
+    request: http.HttpRequest, classroom: models.ClassRoom
+) -> None:
+    lid = request.POST.get("deletelesson")
+    student_delete_lesson(classroom, lid)
+    if lid:
+        intlid = int(lid)
+    classroom_delete_lesson(classroom, intlid)
+
+
+def student_delete_lesson(
+    classroom: models.ClassRoom, lid: Optional[str]
+) -> None:
+    students = get_students_profiles_queryset(classroom)
+
+    for student in students:
+        marks = student.marks
+        marks_current_class = marks[classroom.name]
+        for lesid in marks_current_class:
+            if lesid == lid:
+                del marks_current_class[lesid]
+                break
+        student.save()
+
+
+def classroom_delete_lesson(
+    classroom: models.ClassRoom, intlid: Optional[int]
+) -> None:
+    for lesson in classroom.lessons:
+        if lesson["id"] == intlid:
+            classroom.lessons.remove(lesson)
+        classroom.save()
 
 
 def get_students_to_response(classroom: models.ClassRoom) -> list:

@@ -57,4 +57,7 @@ class ClassRoomEdit(views.View):
         if request.POST.get("commitchanges"):
             helpers.edit_classroom(request, classroom)
 
+        if request.POST.get("deletelesson"):
+            helpers.delete_lesson(request, classroom)
+
         return shortcuts.redirect(f"/classes/{kwargs.get('slug')}")

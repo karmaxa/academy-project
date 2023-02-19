@@ -11,25 +11,23 @@
         today: {{today}}<br>
     </div>
     <div class="container">
-        <form action="addlesson/" method="POST">
+        <form action="editlesson/" method="POST">
         <table class="table table-sm table-bordered" style="width: fit-content; text-align: left;">
             <thead>
                 <tr style="vertical-align: middle;">
                     <th scope="col">Students</th>
                     {% for lesson in lessons %}
-                    <th scope="col">
-                        <input type="date" name="{{lesson.title}}_date" value="{{lesson.dateform}}">
-                        <hr style="margin: 0;">
-                        <input type="text" name="{{lesson.title}}_title" value="{{lesson.title}}">
+                    <th scope="col" rowspan="2">
+                                <input type="date" class="form-control form-control-sm date" name="{{lesson.title}}_date" value="{{lesson.dateform}}">
+                                <input type="text" class="form-control form-control-sm" name="{{lesson.title}}_title" value="{{lesson.title}}">
+                                <button type="submit" class="btn btn-outline-danger btn-sm" name="deletelesson" value="{{lesson.id}}">Delete lesson</button>
+                                
                     </th>
                     {% endfor %}
                     {% csrf_token %}
                     <th scope="col">
-                        <input type="date" name="newlesson_date" value="{{today}}">
-                        <hr style="margin: 0;">
-                        <input type="text" name="newlesson_title" value="{{newles_title}}">
-                    </th>
-                    <th>
+                        <input type="date" class="form-control form-control-sm date" name="newlesson_date" value="{{today}}">
+                        <input type="text" class="form-control form-control-sm" name="newlesson_title" value="{{newles_title}}">
                         <button type="submit" class="btn btn-outline-primary btn-sm" name="newlesson" value="True">Commit lesson</button>
                     </th>
                 </tr>
@@ -43,7 +41,7 @@
                     {% for lesson in classroom.lessons %}
                     <input type="hidden" id="{{student.name}}" value="{{student}}">
                     <td>
-                        <select class="select" name="{{student.identifier}}_lesson{{lesson.id}}">
+                        <select class="form-control form-control-sm select" name="{{student.identifier}}_lesson{{lesson.id}}">
                             <option selected id="{{student.identifier}}_lesson{{lesson.id}}"></option>
                             <option></option>
                             {% for mark in marks %}
@@ -70,7 +68,7 @@
                     </script>
                     {% endfor %}
                     <td colspan="2">
-                        <select name="{{student.identifier}}_newlesson">
+                        <select class="form-control form-control-sm" name="{{student.identifier}}_newlesson">
                             <option selected></option>
                             {% for mark in marks %}
                             <option>
