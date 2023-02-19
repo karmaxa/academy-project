@@ -14,19 +14,25 @@ User = get_user_model()
 
 
 class AuthHelperMixin(AccessMixin):
-    def handle_no_permission(self) -> http.HttpResponseRedirect:
-        if self.request.user.is_authenticated:  # type: ignore
+    def handle_no_permission(self, *args: Any) -> http.HttpResponseRedirect:
+        if (
+            self.request.user.is_authenticated  # type: ignore
+            or "permission" in args
+        ):
             messages.warning(
                 self.request,  # type: ignore
                 "you don't have enough permissions to access this page",
             )
             return shortcuts.redirect("/")
-        else:
+        elif (
+            not self.request.user.is_authenticated  # type: ignore
+            or "login" in args
+        ):
             messages.warning(
                 self.request,  # type: ignore
                 "you need to be logged in to gain access to this page",
             )
-            return super().handle_no_permission()
+        return super().handle_no_permission()
 
 
 class LRMixin(LoginRequiredMixin, AuthHelperMixin):

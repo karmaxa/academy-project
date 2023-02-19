@@ -1,3 +1,4 @@
+from typing import Any
 from typing import Optional
 
 from django import http
@@ -135,7 +136,10 @@ def get_lessons_and_newlesid(classroom: models.ClassRoom) -> tuple[list, int]:
 
     for les in classroom.lessons:
         l_count += 1
-        date: str = ".".join(les.get("date").split("-")[::-1])
+        if les["date"]:
+            date: str = ".".join(les.get("date").split("-")[::-1])
+        else:
+            date = les["date"]
         lessons.append(
             {
                 "id": les.get("id"),
@@ -145,3 +149,11 @@ def get_lessons_and_newlesid(classroom: models.ClassRoom) -> tuple[list, int]:
             }
         )
     return lessons, l_count
+
+
+def get_user_role(request: http.HttpRequest) -> Any:
+    if request.user.is_superuser or request.user.is_staff:
+        return "director"
+    upk = request.user.id
+    uprof = models.Profile.objects.get(user_id=upk)  # type: ignore
+    return uprof.role

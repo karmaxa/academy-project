@@ -9,6 +9,7 @@
         students: {{students}}<br>
         lessons: {{classroom.lessons}}<br>
         today: {{today}}<br>
+        role: {{user_role}}<br>
     </div>
     <div class="container">
         <form action="editlesson/" method="POST">
@@ -18,10 +19,14 @@
                     <th scope="col">Students</th>
                     {% for lesson in lessons %}
                     <th scope="col" rowspan="2">
+                                {% if user_role == 'director' %}
                                 <input type="date" class="form-control form-control-sm date" name="{{lesson.title}}_date" value="{{lesson.dateform}}">
                                 <input type="text" class="form-control form-control-sm" name="{{lesson.title}}_title" value="{{lesson.title}}">
                                 <button type="submit" class="btn btn-outline-danger btn-sm" name="deletelesson" value="{{lesson.id}}">Delete lesson</button>
-                                
+                                {% else %}
+                                <input type="date" class="form-control form-control-sm date" name="{{lesson.title}}_date" value="{{lesson.dateform}}" disabled>
+                                <input type="text" class="form-control form-control-sm" name="{{lesson.title}}_title" value="{{lesson.title}}" disabled>
+                                {% endif %}
                     </th>
                     {% endfor %}
                     {% csrf_token %}
@@ -41,6 +46,7 @@
                     {% for lesson in classroom.lessons %}
                     <input type="hidden" id="{{student.name}}" value="{{student}}">
                     <td>
+                        {% if user_role == 'director' %}
                         <select class="form-control form-control-sm select" name="{{student.identifier}}_lesson{{lesson.id}}">
                             <option selected id="{{student.identifier}}_lesson{{lesson.id}}"></option>
                             <option></option>
@@ -50,6 +56,11 @@
                             </option>
                             {% endfor %}
                         </select>
+                        {% else %}
+                        <select class="form-control form-control-sm select" name="{{student.identifier}}_lesson{{lesson.id}}" disabled>
+                            <option selected id="{{student.identifier}}_lesson{{lesson.id}}"></option>
+                        </select>
+                        {% endif %}
                     </td>
                     <script>
                         stname = "{{student.name}}";
@@ -82,9 +93,11 @@
             
             </tbody>
         </table>
+        {% if user_role == 'director' %}
         <div class="container">
             <button type="submit" class="btn btn-outline-primary btn-sm" name="commitchanges" value="True">Commit changes</button>
         </div>
+        {% endif %}
     </form>
     </div>
     <div class="mb-3">
