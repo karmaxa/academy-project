@@ -16,6 +16,7 @@ from app_main.forms import NewUserForm
 from app_main.forms import SignUpForm
 from app_main.models import Profile
 from app_main.views.mixins import LRMixin
+from app_main.views.mixins import RoleUPTMixin
 
 User = get_user_model()
 
@@ -109,7 +110,9 @@ class UserSignUp(generic.FormView):
         return shortcuts.redirect(self.success_url)
 
 
-class NewUserCreate(LRMixin, generic.FormView):
+class NewUserCreate(LRMixin, RoleUPTMixin, generic.FormView):
+    role_required = "director"
+
     template_name = "app_main/newuser.html"
     form_class = NewUserForm
     success_url = "/users/"
