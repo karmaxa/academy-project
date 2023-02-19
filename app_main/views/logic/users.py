@@ -45,10 +45,20 @@ class UserUpdateView(ProfileSingleObjectMixin, generic.UpdateView):
         "name",
         "lastname",
         "email",
-        "marks",
         "role",
     ]
     success_url = "/users"
     extra_context = {
         "roles": [role[0] for role in roles],
     }
+
+    def form_valid(self, form: forms.Form) -> http.HttpResponse:
+        user = self.object.user
+        user.username, user.name, user.lastname, user.email = (
+            form.data["username"],
+            form.data["name"],
+            form.data["lastname"],
+            form.data["email"],
+        )
+        user.save()
+        return super().form_valid(form)
