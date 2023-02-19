@@ -64,7 +64,7 @@ def edit_classroom(
         for student in students:
             marks = student.marks
             marks_current_class = marks.get(classroom.name)
-            marks_current_class[lesson["id"]] = request.POST.get(
+            marks_current_class[str(lid)] = request.POST.get(
                 f"{student.name}{student.lastname}_lesson{lid}"
             )
             student.save()
@@ -154,9 +154,6 @@ def get_lessons_and_newlesid(classroom: models.ClassRoom) -> tuple[list, int]:
 def get_user_profile(request: http.HttpRequest) -> models.Profile:
     upk = request.user.id
     uprof = models.Profile.objects.get(user_id=upk)  # type: ignore
-    # role = uprof.role
-    # if request.user.is_superuser or request.user.is_staff:
-    #     role: str = "director"
     return uprof
 
 
