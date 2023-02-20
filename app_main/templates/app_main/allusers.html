@@ -11,13 +11,23 @@
             <div class="container collapse" id="collapsesearch">
                 <form class="list row g-2 col-12" style="max-width: 300px; margin: 8px 0;" method="POST" action="search/">
                     {% csrf_token %}
-                    <input type="text" class="form-control" name="search" placeholder="Type here...">
+                    <label>Search by text:</label>
+                    <input type="text" class="form-control" name="searchtxt" placeholder="{% if stxt %}{{stxt}}{% else %}Type here...{%endif%}">
+                    <label>Search by role:</label>
+                    <select class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" name="searchrole">
+                        <option selected value="{{ srole }}">{{ srole }}</option>
+                        {% for r in roles %}
+                        {% if srole != r %}
+                        <option value="{{r}}">{{r}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
                     <button type="submit" class="btn btn-outline-primary btn-sm">Search!</button>
                 </form>
             </div>
         <div class="container">
-            {% if stxt %}
-            <h5>Searching by <b>{{stxt}}</b></h5>
+            {% if stxt or srole %}
+            <h5>Searching by {% if stxt %}<b>{{stxt}}</b>{% endif %}{%if stxt and srole%}, {%endif%}{% if srole %}role: <b>{{srole}}</b>{% endif %}</h5>
             {% endif %}
             <table class="table">
                 <thead>
@@ -34,7 +44,19 @@
                         <th scope="col">{{ c.name }}</th>
                         <th scope="col">{{ c.lastname }}</th>
                         <th scope="col">{{ c.email }}</th>
-                        <th scope="col">{{ c.role }}</th>
+                        <th scope="col">
+                            {% if c.role != srole %}
+                            <form action="search/" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="searchrole" value="{{c.role}}">
+                            <button class="btn btn-sm btn-outline-primary" type="submit">
+                                {{ c.role }}
+                            </button>
+                            </form>
+                            {% else %}
+                            {{ c.role }}
+                            {%endif%}
+                        </th>
                         <th scope="col" width="20">
                             <form action="{{ c.id }}/edit/">
                                 <button type="submit" class="btn btn-outline-primary btn-sm">Edit</button>
@@ -56,11 +78,12 @@
                     {% endfor %}
                 </tbody>
             </table>
-            {% if stxt %}
-                <form method="POST" action="reset/">
+            {% if stxt or srole %}
+                <form method="POST" action="search/reset/">
                     {% csrf_token %}
-                    <input type="hidden" value="yes" name="clearsearch">
-                    <button type="submit" class="btn btn-outline-primary btn-sm">Clear search</button>
+                    <button type="submit" class="btn btn-outline-primary btn-sm" name="clearsearch" value="True">Clear search</button>
+                    <button type="submit" class="btn btn-outline-primary btn-sm" name="cleartxt" value="True">Clear text search</button>
+                    <button type="submit" class="btn btn-outline-primary btn-sm" name="clearrole" value="True">Clear role search</button>
                 </form>
             {% endif %}
         </div>

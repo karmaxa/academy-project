@@ -242,3 +242,17 @@ def get_user_classrooms(request: http.HttpRequest, param: str) -> QuerySet:
     elif urole == "student":
         classrooms = models.ClassRoom.objects.filter(student__id=upk)
     return classrooms
+
+
+def get_users_after_search(stxt: str, srole: str) -> list:
+    userslist: list = []
+    all_profiles = models.Profile.objects.all()
+    for profile in all_profiles:
+        if (not srole or srole == profile.role) and (
+            stxt == ""
+            or stxt in profile.username
+            or stxt in profile.name
+            or stxt in profile.lastname
+        ):
+            userslist.append(profile)
+    return userslist

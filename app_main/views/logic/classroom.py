@@ -9,9 +9,8 @@ from django.views import generic
 
 from app_main import models
 from app_main.helpers import marks
-from app_main.views.logic import helpers
-from app_main.views.mixins import LRMixin
-from app_main.views.mixins import RoleUPTMixin
+from app_main.mixins import LRMixin
+from app_main.mixins import RoleUPTMixin
 
 User = get_user_model()
 
@@ -26,6 +25,8 @@ class ClassRoomView(LRMixin, generic.DetailView):
         self, request: http.HttpRequest, *args: Any, **kwargs: dict
     ) -> http.HttpResponse:
         classroom = models.ClassRoom.objects.get(slug=kwargs.get("slug"))
+
+        from app_main.views.logic import helpers
 
         students = helpers.get_students_to_response(classroom)
 
@@ -61,6 +62,8 @@ class ClassRoomEdit(LRMixin, RoleUPTMixin, views.View):
         self, request: http.HttpRequest, *args: Any, **kwargs: dict
     ) -> http.HttpResponseRedirect:
         classroom = models.ClassRoom.objects.get(slug=kwargs.get("slug"))
+        from app_main.views.logic import helpers
+
         user_role = helpers.get_user_role(request)
 
         if request.POST.get("newlesson"):

@@ -3,7 +3,7 @@ from django import views
 from django.contrib.auth import get_user_model
 from django.shortcuts import render
 
-from app_main.views.mixins import LRMixin
+from app_main.mixins import LRMixin
 
 User = get_user_model()
 

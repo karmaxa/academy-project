@@ -11,10 +11,6 @@ from django.views.generic.detail import SingleObjectMixin
 
 from app_main.helpers import roles_priorities
 from app_main.models import Profile
-from app_main.views.logic.helpers import get_current_student
-from app_main.views.logic.helpers import get_user_classrooms
-from app_main.views.logic.helpers import get_user_profile
-from app_main.views.logic.helpers import get_user_role
 
 User = get_user_model()
 
@@ -63,20 +59,29 @@ class ProfileSingleObjectMixin(LRMixin, SingleObjectMixin):
     def handle_no_permission(  # type: ignore
         self, *args: Any
     ) -> http.HttpResponseRedirect:
+        from app_main.views.logic.helpers import get_user_role
+
         u_role = get_user_role(self.request)  # type: ignore
         if u_role != "director":
+            from app_main.views.logic.helpers import get_user_profile
+
             u_profile = get_user_profile(self.request, "self")  # type: ignore
             if u_profile.user != self.request.user:  # type: ignore
                 return super().handle_no_permission(self, "permission")
 
     def get_object(self, queryset=None) -> Any:  # type: ignore
         if not self.request.resolver_match.kwargs.get("pk"):  # type: ignore
+            from app_main.views.logic.helpers import get_user_profile
+
             return get_user_profile(self.request, "self")  # type: ignore
         else:
             return super().get_object()
 
     def get_context_data(self, **kwargs: dict) -> Any:
         ctx = super().get_context_data()
+        from app_main.views.logic.helpers import get_current_student
+        from app_main.views.logic.helpers import get_user_classrooms
+
         if self.request.resolver_match.kwargs.get("pk"):  # type: ignore
             classrooms = get_user_classrooms(
                 self.request, "path"  # type: ignore
