@@ -33,7 +33,9 @@ class ClassRoomView(LRMixin, generic.DetailView):
 
         user_role = helpers.get_user_role(request)
 
-        current_student = helpers.get_current_student(request, classroom)
+        current_student = helpers.get_current_student(
+            request, classroom, "self"
+        )
 
         response = shortcuts.render(
             self.request,

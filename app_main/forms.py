@@ -15,6 +15,10 @@ class LogInForm(forms.Form):
 
 
 class NewUserForm(forms.Form):
+    username = forms.CharField(
+        label="First name:",
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
     firstname = forms.CharField(
         label="First name:",
         widget=forms.TextInput(attrs={"class": "form-control"}),
@@ -43,6 +47,10 @@ class NewUserForm(forms.Form):
 
 
 class SignUpForm(forms.Form):
+    username = forms.CharField(
+        label="First name:",
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
     firstname = forms.CharField(
         label="First name:",
         widget=forms.TextInput(attrs={"class": "form-control"}),

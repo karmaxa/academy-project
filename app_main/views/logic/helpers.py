@@ -157,8 +157,8 @@ def get_user_profile(request: http.HttpRequest, param: str) -> models.Profile:
         upk = request.user.id
         uprof = models.Profile.objects.get(user_id=upk)  # type: ignore
     if param == "path":
-        profile_pk = request.resolver_match.kwargs["pk"]  # type: ignore
-        uprof = models.Profile.objects.get(id=profile_pk)
+        profile_pk = request.resolver_match.kwargs.get("pk")  # type: ignore
+        uprof = models.Profile.objects.get(id=profile_pk)  # type: ignore
     return uprof
 
 
@@ -183,9 +183,9 @@ def build_student_marks_to_response(
 
 
 def get_current_student(
-    request: http.HttpRequest, classroom: Optional[models.ClassRoom]
+    request: http.HttpRequest, classroom: Optional[models.ClassRoom], par: str
 ) -> Optional[dict]:
-    param: str = "self" if classroom else "path"
+    param: str = "self" if (classroom or par == "self") else "path"
     user_profile = get_user_profile(request, param)
 
     if user_profile.role != "student":
@@ -205,7 +205,7 @@ def build_current_student(
     request: http.HttpRequest, user_profile: models.Profile
 ) -> dict:
     classes: dict = {}
-    classrooms = get_user_classrooms(request)
+    classrooms = get_user_classrooms(request, "path")
     for classroom in classrooms:
         mks = build_student_marks_to_response(user_profile, classroom)
         for lsn in mks:
@@ -233,8 +233,8 @@ def build_classroom_current_student(
     return current_student
 
 
-def get_user_classrooms(request: http.HttpRequest) -> QuerySet:
-    profile = get_user_profile(request, "path")
+def get_user_classrooms(request: http.HttpRequest, param: str) -> QuerySet:
+    profile = get_user_profile(request, param)
     urole = profile.role
     upk = profile.user.id
     if urole == "teacher" or urole == "director":

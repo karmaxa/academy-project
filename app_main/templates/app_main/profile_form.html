@@ -4,12 +4,32 @@
 <div style="height:40px"></div>
 <div class="container" style="margin: top 2em;">
     <div class="container">
-        <h3>{{object.name}} {{object.lastname}}</h3>
+        <h3>Editing of {{object.name}} {{object.lastname}}</h3>
     </div>
     <br>
     <form method="POST">
         {% csrf_token %}
     <div class="container">
+        <h4>Username:</h4>
+        <div class="input-group input-group-lg">
+            <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" name="username" value="{{object.username}}">
+        </div>
+        <br>
+        <h4>Name:</h4>
+        <div class="input-group input-group-lg">
+            <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" name="name" value="{{object.name}}">
+        </div>
+        <br>
+        <h4>Last name:</h4>
+        <div class="input-group input-group-lg">
+            <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" name="lastname" value="{{object.lastname}}">
+        </div>
+        <br>
+        <h4>E-mail:</h4>
+        <div class="input-group input-group-lg">
+            <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" name="email" value="{{object.email}}">
+        </div>
+        <br>
         <h4>Role:</h4>
         <div class="input-group input-group-lg">
             <select class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" name="role">
@@ -21,31 +41,13 @@
                 {% endfor %}
             </select>
         </div>
-        <br>
-        {% if object.role == 'student' %}
-        <h4>Marks:</h4>
-        <div class="input-group input-group-lg">
-            <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" value="{{object.marks}}" disabled>
-        </div>
-        <br>
-        <h4>Classes:</h4>
-        <div class="input-group input-group-lg">
-            <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" value="{{classes}}" disabled>
-        </div>
-        <br>
-        {% elif object.role == 'teacher' %}
-        <h4>Classes:</h4>
-        <div class="input-group input-group-lg">
-            <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" value="{{classes}}" disabled>
-        </div>
-        <br>
-        {% endif %}
-        <button type="submit" class="btn btn-primary btn-lg" value="update">Confirm</button>
-        <br>
+    <br>
+    <button type="submit" class="btn btn-primary btn-lg" value="confirm">Confirm</button>
+    <br>
     </div>
     </form>
     <div class="mb-3">
-        <a href="../../">back
+        <a href="../">back
         </a>
     </div>
 </div>
