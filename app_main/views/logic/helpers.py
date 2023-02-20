@@ -77,8 +77,7 @@ def delete_lesson(
 ) -> None:
     lid = request.POST.get("deletelesson")
     student_delete_lesson(classroom, lid)
-    if lid:
-        intlid = int(lid)
+    intlid = int(lid) or None  # type: ignore
     classroom_delete_lesson(classroom, intlid)
 
 
@@ -256,3 +255,23 @@ def get_users_after_search(stxt: str, srole: str) -> list:
         ):
             userslist.append(profile)
     return userslist
+
+
+def rename_students_classroom(
+    classroom: models.ClassRoom, old_name: str
+) -> None:
+    students = get_students_profiles_queryset(classroom)
+    for student in students:
+        marks = student.marks
+        buffer = {classroom.name: marks[old_name]}
+        del marks[old_name]
+        marks.update(buffer)
+        student.save()
+
+
+def remove_students_classroom(classroom: models.ClassRoom) -> None:
+    students = get_students_profiles_queryset(classroom)
+    for student in students:
+        marks = student.marks
+        del marks[classroom.name]
+        student.save()

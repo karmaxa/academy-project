@@ -63,6 +63,7 @@ urllib3 = "^1.26.14"
 uvicorn = {extras = ["standard"], version = "^0.20.0"}
 watchfiles = "^0.18.1"
 whitenoise = "^6.3.0"
+sqlalchemy = "^2.0.4"
 
 
 [build-system]

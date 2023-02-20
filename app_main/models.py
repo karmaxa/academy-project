@@ -10,7 +10,11 @@ User = get_user_model()
 
 class Profile(models.Model):
     user: Any = models.OneToOneField(
-        User, blank=True, null=True, on_delete=models.CASCADE, related_name="+"
+        User,
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name="profile",
     )
     username: Any = models.TextField(
         blank=True,

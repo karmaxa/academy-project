@@ -1,5 +1,6 @@
 from django import forms
 
+from app_main.helpers import get_all_teachers_as_choices
 from app_main.helpers import roles
 
 
@@ -66,4 +67,20 @@ class SignUpForm(forms.Form):
     email = forms.EmailField(
         label="Email:",
         widget=forms.EmailInput(attrs={"class": "form-control"}),
+    )
+
+
+class NewClassRoomForm(forms.Form):
+    name = forms.CharField(
+        label="Name:",
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
+    teacher = forms.ChoiceField(
+        label="Teacher:",
+        choices=get_all_teachers_as_choices(),
+        widget=forms.Select(
+            attrs={
+                "class": "form-control",
+            }
+        ),
     )

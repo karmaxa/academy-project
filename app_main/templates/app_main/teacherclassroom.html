@@ -4,6 +4,8 @@
 <div style="height:40px"></div>
 <div class="container">
     <h3>{{classroom.name}}</h3>
+    <a class="btn btn-outline primary btn-sm" style="border: 1px solid blue; color: blue;" href="editclassroom/">Edit classroom</a>
+    <a class="btn btn-outline danger btn-sm" style="border: 1px solid red; color: red;" href="deleteclassroom/">Delete classroom</a>
 </div>
 <div class="container" style="margin: top 2em; ">
     {% if user_role == 'teacher' or user_role == 'director' %}
