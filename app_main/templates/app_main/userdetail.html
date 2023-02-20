@@ -35,7 +35,11 @@
         <br>
         <h4>Classrooms:</h4>
         <div class="input-group input-group-lg">
-            <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" value="{{classrooms}}" disabled>
+            {% for classroom in classrooms %}
+                <a href="/classes/{{classroom.slug}}/" role="button", class="btn btn_primary" aria-expanded="false" style="border: 1px solid blue; color: blue;">
+                    {{classroom.name}}
+                </a>
+            {% endfor %}
         </div>
         <br>
         {% if object.role == 'student' %}
