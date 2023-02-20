@@ -56,6 +56,7 @@
         </div>
         <div class="card-body">
         {% block content %}
+            {% if prf.role == 'director' or acc.is_superuser == 1 or acc.is_staff == 1 %}
                 <div class="container">
                     <form class="list row g-2 col-12" method="get" action="{% url 'main:newuser' %}">
                         <button type="submit" class="btn btn-outline-warning btn-sm" value="confirm" style="max-width: 100px;">Create new user</button>
@@ -68,6 +69,7 @@
                     </form>
                 </div>
                 <br>
+            {% endif %}
                 <div class="container">
                     <form class="list row g-2 col-12" method="get" action="{% url 'main:classrooms' %}">
                         <button type="submit" class="btn btn-outline-warning btn-sm" value="confirm" style="max-width: 100px;">Classrooms</button>

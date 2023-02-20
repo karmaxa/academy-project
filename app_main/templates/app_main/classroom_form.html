@@ -7,13 +7,35 @@
         <h3>Create new classroom</h3>
     </div>
     <div class="container">
-        <div class="container">
-            <form class="list row g-2 col-12" style="max-width:250px" method="post">
+        <form class="list row g-2 col-12" style="max-width:450px" method="post">
+            <div class="container" style="max-width:250px; margin-left: 0;">
                 {% csrf_token %}
                 {{ form }}
-                <button type="submit" class="btn btn-primary btn-lg" value="confirm">Confirm</button>
-            </form>
-        </div>
+                
+            </div>
+            <h5>Pick students:</h5>
+            <div>
+                <table class="table table-striped table-sm">
+                    <tbody>
+                        {% for student in students %}
+                        <tr>
+                            <th scope="col" style="width: 80px">
+                                <input type="checkbox" class="btn-check" id="btn-check-outlined{{student.id}}" autocomplete="off" name="students_id" value="{{student.id}}">
+                                <label class="btn btn-outline-primary" for="btn-check-outlined{{student.id}}">Toggle</label>
+                            </th>
+                            <th scope="col" style="text-align: center; vertical-align: middle;">
+                                {{student.username}}
+                            </th>
+                            <th scope="col" style="text-align: center; vertical-align: middle;">
+                                {{student.last_name}}
+                            </th>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg" value="confirm" style="max-width: 250px;">Confirm</button>
+        </form>
     </div>
     <div class="mb-3">
         <a href="/classes/">back

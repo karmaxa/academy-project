@@ -8,6 +8,7 @@ from django import views
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import QuerySet
 from django.views import generic
 
 from app_main import models
@@ -34,20 +35,36 @@ class ClassesView(LRMixin, generic.ListView):
         ctx["user_role"] = u_role
         return ctx
 
+    def get_queryset(self) -> QuerySet:
+        profile = models.Profile.objects.get(  # type: ignore
+            user_id=self.request.user.pk
+        )
+        user = User.objects.get(id=self.request.user.pk)  # type: ignore
+        if profile.role == "director" or user.is_superuser or user.is_staff:
+            return super().get_queryset()  # type: ignore
+        from app_main.views.logic.helpers import get_user_classrooms
+
+        return get_user_classrooms(self.request, "self")  # type: ignore
+
 
 class ClassRoomView(LRMixin, generic.DetailView):
     def get(
         self, request: http.HttpRequest, *args: Any, **kwargs: dict
     ) -> http.HttpResponse:
+        from app_main.views.logic import helpers
+
+        user_role = helpers.get_user_role(request)
+
         classroom = models.ClassRoom.objects.get(slug=kwargs.get("slug"))
 
-        from app_main.views.logic import helpers
+        if user_role == "student":
+            permitted_rooms = helpers.get_user_classrooms(request, "self")
+            if classroom not in permitted_rooms:  # type: ignore
+                return super().handle_no_permission("permission")
 
         students = helpers.get_students_to_response(classroom)
 
         lessons, l_count = helpers.get_lessons_and_newlesid(classroom)
-
-        user_role = helpers.get_user_role(request)
 
         current_student = helpers.get_current_student(
             request, classroom, "self"
@@ -122,7 +139,17 @@ class AddNewClassRoom(LRMixin, RoleUPTMixin, generic.FormView):
             teacher_id=teacher_id,
         )
         obj.save()
+        students_id = self.request.POST.getlist("students_id")
+        for sid in students_id:
+            stud = User.objects.get(id=sid)
+            stud.classroom_set.add(obj)
+            stud.save()
         return response
+
+    def get_context_data(self, **kwargs: dict) -> dict:
+        ctx = super(AddNewClassRoom, self).get_context_data()
+        ctx["students"] = User.objects.filter(profile__role="student")
+        return ctx
 
 
 class EditClassroomNameOrTeacher(LRMixin, RoleUPTMixin, generic.FormView):

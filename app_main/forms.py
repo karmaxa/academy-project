@@ -17,7 +17,7 @@ class LogInForm(forms.Form):
 
 class NewUserForm(forms.Form):
     username = forms.CharField(
-        label="First name:",
+        label="Username:",
         widget=forms.TextInput(attrs={"class": "form-control"}),
     )
     firstname = forms.CharField(
@@ -31,10 +31,6 @@ class NewUserForm(forms.Form):
     password = forms.CharField(
         label="Password:",
         widget=forms.PasswordInput(attrs={"class": "form-control"}),
-    )
-    email = forms.EmailField(
-        label="Email:",
-        widget=forms.EmailInput(attrs={"class": "form-control"}),
     )
     role = forms.ChoiceField(
         label="Role:",
@@ -49,7 +45,7 @@ class NewUserForm(forms.Form):
 
 class SignUpForm(forms.Form):
     username = forms.CharField(
-        label="First name:",
+        label="Username:",
         widget=forms.TextInput(attrs={"class": "form-control"}),
     )
     firstname = forms.CharField(
@@ -64,10 +60,6 @@ class SignUpForm(forms.Form):
         label="Password:",
         widget=forms.PasswordInput(attrs={"class": "form-control"}),
     )
-    email = forms.EmailField(
-        label="Email:",
-        widget=forms.EmailInput(attrs={"class": "form-control"}),
-    )
 
 
 class NewClassRoomForm(forms.Form):
@@ -77,7 +69,7 @@ class NewClassRoomForm(forms.Form):
     )
     teacher = forms.ChoiceField(
         label="Teacher:",
-        choices=get_all_teachers_as_choices(),
+        choices=get_all_teachers_as_choices,
         widget=forms.Select(
             attrs={
                 "class": "form-control",

@@ -94,7 +94,7 @@ class UserSignUp(generic.FormView):
             form.cleaned_data["lastname"],
             form.cleaned_data["password"],
         )
-        user = User.objects.create_user(username, password)
+        user = User.objects.create_user(username, "", password)
         user.first_name, user.last_name = firstname, lastname
         user.save()
         user_to_profile = User.objects.get(username=user.username)
@@ -102,7 +102,7 @@ class UserSignUp(generic.FormView):
         userli = authenticate(
             self.request, username=username, password=password
         )
-        login(request=self.request, user=userli)
+        login(self.request, userli)
         messages.warning(self.request, "successfully signed up")
         return shortcuts.redirect(self.success_url)
 
@@ -122,7 +122,7 @@ class NewUserCreate(LRMixin, RoleUPTMixin, generic.FormView):
             form.cleaned_data["password"],
             form.cleaned_data["role"],
         )
-        user = User.objects.create_user(username, password)
+        user = User.objects.create_user(username, "", password)
         user.first_name, user.last_name = firstname, lastname
         user.save()
         user_to_profile = User.objects.get(username=user.username)
