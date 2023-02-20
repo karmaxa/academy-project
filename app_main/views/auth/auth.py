@@ -14,9 +14,9 @@ from django.views import generic
 from app_main.forms import LogInForm
 from app_main.forms import NewUserForm
 from app_main.forms import SignUpForm
+from app_main.mixins import LRMixin
+from app_main.mixins import RoleUPTMixin
 from app_main.models import Profile
-from app_main.views.mixins import LRMixin
-from app_main.views.mixins import RoleUPTMixin
 
 User = get_user_model()
 

@@ -4,6 +4,8 @@ from .classroom import ClassRoomView
 from .users import AllUsersView
 from .users import UserDeleteView
 from .users import UserDetailView
+from .users import UserSearchView
+from .users import UserSearchViewReset
 from .users import UserUpdateView
 
 __all__ = [  # noqa: F405
@@ -14,4 +16,6 @@ __all__ = [  # noqa: F405
     "ClassRoomView",
     "ClassesView",
     "ClassRoomEdit",
+    "UserSearchView",
+    "UserSearchViewReset",
 ]

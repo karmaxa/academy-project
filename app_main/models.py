@@ -41,6 +41,14 @@ class Profile(models.Model):
         blank=True,
         null=True,
     )
+    searchtxt: Any = models.TextField(
+        blank=True,
+        null=True,
+    )
+    searchrole: Any = models.TextField(
+        blank=True,
+        null=True,
+    )
 
     def __str__(self) -> str:
         return " ".join([self.name, self.lastname])
