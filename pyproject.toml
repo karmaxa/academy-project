@@ -58,7 +58,7 @@ python = "^3.10"
 python-dotenv = "^0.21.1"
 requests = "^2.28.2"
 types-dj-database-url = "^1.2.0.0"
-types-requests = "^2.28.11.12"
+types-requests = "^2.28.11.13"
 urllib3 = "^1.26.14"
 uvicorn = {extras = ["standard"], version = "^0.20.0"}
 watchfiles = "^0.18.1"
