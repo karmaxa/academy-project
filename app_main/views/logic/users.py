@@ -24,8 +24,8 @@ class AllUsersView(LRMixin, RoleUPTMixin, generic.ListView):
         from app_main.views.logic.helpers import get_user_profile
 
         user_profile = get_user_profile(self.request, "self")
-        self.searchtxt = "" or user_profile.searchtxt
-        self.searchrole = "" or user_profile.searchrole
+        self.searchtxt = user_profile.searchtxt or ""
+        self.searchrole = user_profile.searchrole or ""
         from app_main.views.logic.helpers import get_users_after_search
 
         userlist: Any = get_users_after_search(self.searchtxt, self.searchrole)
@@ -55,7 +55,7 @@ class UserDeleteView(  # type: ignore
 ):
     role_required: str = "director"
     model = Profile
-    success_url = "users/"
+    success_url = "/users/"
 
     def form_valid(self, form: forms.Form) -> http.HttpResponse:
         user_id = self.object.user_id

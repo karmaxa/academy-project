@@ -39,11 +39,26 @@ urlpatterns = [
     ),
     path("classes/", views.ClassesView.as_view(), name="classrooms"),
     path(
+        "classes/create/",
+        views.AddNewClassRoom.as_view(),
+        name="classroomcreate",
+    ),
+    path(
         "classes/<slug:slug>/", views.ClassRoomView.as_view(), name="classroom"
     ),
     path(
         "classes/<slug:slug>/editlesson/",
         views.ClassRoomEdit.as_view(),
         name="editlesson",
+    ),
+    path(
+        "classes/<slug:slug>/editclassroom/",
+        views.EditClassroomNameOrTeacher.as_view(),
+        name="editclassroom",
+    ),
+    path(
+        "classes/<slug:slug>/deleteclassroom/",
+        views.DeleteClassroom.as_view(),
+        name="deleteclassroom",
     ),
 ]

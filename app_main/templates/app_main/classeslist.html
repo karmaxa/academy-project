@@ -9,13 +9,22 @@
     <div class="container">
         <div class="container">
             {% for o in object_list %}
-            <div class="container">
                 <form action="{{o.name}}/">
                     <button type="submit" class="btn btn-outline-primary btn-lg">{{o.name}}</button>
                 </form>
-            </div>
+                <br>
+                {% empty %}
+                <h5>Nothing here yet</h5>
             {% endfor %}
         </div>
+        <br>
+        {% if user_role == 'director' %}
+        <div class="container">
+            <form action="create/">
+                <button type="submit" class="btn btn-outline-primary btn-lg">Create New Classroom</button>
+            </form>
+        </div>
+        {% endif %}
     </div>
     <div class="mb-3">
         <a href="../">back

@@ -1,7 +1,9 @@
+from contextlib import suppress
 from typing import Any
 from typing import Optional
 
 from django import http
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import QuerySet
 
 from app_main import models
@@ -77,8 +79,7 @@ def delete_lesson(
 ) -> None:
     lid = request.POST.get("deletelesson")
     student_delete_lesson(classroom, lid)
-    if lid:
-        intlid = int(lid)
+    intlid = int(lid) or None  # type: ignore
     classroom_delete_lesson(classroom, intlid)
 
 
@@ -152,10 +153,34 @@ def get_lessons_and_newlesid(classroom: models.ClassRoom) -> tuple[list, int]:
     return lessons, l_count
 
 
-def get_user_profile(request: http.HttpRequest, param: str) -> models.Profile:
+def get_user_profile(  # noqa: CCR001
+    request: http.HttpRequest, param: str
+) -> models.Profile:
     if param == "self":
         upk = request.user.id
-        uprof = models.Profile.objects.get(user_id=upk)  # type: ignore
+        try:
+            uprof = models.Profile.objects.get(user_id=upk)  # type: ignore
+        except ObjectDoesNotExist:
+            from django.contrib.auth import get_user_model
+
+            user = get_user_model()
+            cur_user = user.objects.get(id=upk)  # type: ignore
+            role: Optional[str] = (
+                "SUPERUSER"
+                if cur_user.is_superuser or cur_user.is_staff
+                else None
+            )
+            uprof = models.Profile(  # type: ignore
+                user_id=upk,
+                username=cur_user.username,
+                name=cur_user.username,
+                lastname=cur_user.last_name,
+                email=cur_user.email,
+                searchtxt="",
+                searchrole="",
+                role=role,
+            )
+            uprof.save()
     if param == "path":
         profile_pk = request.resolver_match.kwargs.get("pk")  # type: ignore
         uprof = models.Profile.objects.get(id=profile_pk)  # type: ignore
@@ -205,8 +230,8 @@ def build_current_student(
     request: http.HttpRequest, user_profile: models.Profile
 ) -> dict:
     classes: dict = {}
-    classrooms = get_user_classrooms(request, "path")
-    for classroom in classrooms:
+    classrooms = get_user_classrooms(request, "self")
+    for classroom in classrooms:  # type: ignore
         mks = build_student_marks_to_response(user_profile, classroom)
         for lsn in mks:
             if mks[lsn] is None:
@@ -233,7 +258,9 @@ def build_classroom_current_student(
     return current_student
 
 
-def get_user_classrooms(request: http.HttpRequest, param: str) -> QuerySet:
+def get_user_classrooms(
+    request: http.HttpRequest, param: str
+) -> Optional[QuerySet]:
     profile = get_user_profile(request, param)
     urole = profile.role
     upk = profile.user.id
@@ -241,6 +268,8 @@ def get_user_classrooms(request: http.HttpRequest, param: str) -> QuerySet:
         classrooms = models.ClassRoom.objects.filter(teacher__id=upk)
     elif urole == "student":
         classrooms = models.ClassRoom.objects.filter(student__id=upk)
+    else:
+        classrooms = None
     return classrooms
 
 
@@ -256,3 +285,24 @@ def get_users_after_search(stxt: str, srole: str) -> list:
         ):
             userslist.append(profile)
     return userslist
+
+
+def rename_students_classroom(
+    classroom: models.ClassRoom, old_name: str
+) -> None:
+    students = get_students_profiles_queryset(classroom)
+    for student in students:
+        marks = student.marks
+        buffer = {classroom.name: marks[old_name]}
+        del marks[old_name]
+        marks.update(buffer)
+        student.save()
+
+
+def remove_students_classroom(classroom: models.ClassRoom) -> None:
+    students = get_students_profiles_queryset(classroom)
+    for student in students:
+        marks = student.marks
+        with suppress(KeyError):
+            del marks[classroom.name]
+        student.save()

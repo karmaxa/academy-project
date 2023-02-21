@@ -12,10 +12,14 @@ class HomeView(LRMixin, views.View):
     def get(self, request: http.HttpRequest) -> http.HttpResponse:
         try:
             acc = User.objects.get(id=self.request.user.pk)  # type: ignore
+            from app_main.views.logic.helpers import get_user_profile
+
+            prf = get_user_profile(self.request, "self")
         except User.DoesNotExist:
             acc = None
+            prf = None
         return render(
             request,
             "app_main/index.html",
-            {"acc": acc},
+            {"acc": acc, "prf": prf},
         )

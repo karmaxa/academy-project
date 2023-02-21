@@ -1,0 +1,43 @@
+{% extends 'app_main/index.html' %}
+
+{% block content %}
+<div style="height:40px"></div>
+<div class="container" style="margin: top 2em;">
+    <div class="container">
+        <h3>Editing classroom {{slug}}</h3>
+    </div>
+    <br>
+    <div class="container">
+        <div class="container">
+            <form class="list row g-2 col-12" style="max-width:250px" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="slug" value="{{slug}}">
+                
+                <h4>Name:</h4>
+                <div class="input-group input-group-lg">
+                <input type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" name="name" value="{{slug}}">
+                </div>
+                <br>
+                <h4>Teacher:</h4>
+                <div class="input-group input-group-lg">
+            <select class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" name="teacher">
+                <option selected value="{{ teacher.0 }}">{{ teacher.1 }}</option>
+                {% for t in teachers %}
+                {% if teacher.0 != t.0 %}
+                <option value="{{t.0}}">{{t.1}}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+            </div>
+            <br>
+                <button type="submit" class="btn btn-primary btn-lg" value="confirm">Confirm</button>
+            </form>
+        </div>
+    </div>
+    <div class="mb-3">
+        <a href="../">back
+        </a>
+    </div>
+</div>
+
+{% endblock content %}

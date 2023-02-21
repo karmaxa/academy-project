@@ -33,7 +33,7 @@
                         {% csrf_token %}
                         <button type="submit" class="btn btn-outline-warning btn-sm" value="confirm" style="max-width: 100px;">Log out</button>
                     </form>
-                    <div style="float: right; display: inline; margin-left: 1em; margin-right: 1em; margin-top: 4px;"><h6><a href="/profile/">{{ user }}</a></h6></div>
+                    <div style="float: right; display: inline; margin-left: 1em; margin-right: 1em; margin-top: 4px;"><h6><a href="/profile/">{{ user }}</a>, {{prf.role}}</h6></div>
                 </div>
             {% else %}
             <div class="container" style="max-width:300px; float:right">
@@ -56,6 +56,10 @@
         </div>
         <div class="card-body">
         {% block content %}
+        <div class="container">
+            <h3>Hello, {{prf.role}} <a href="/profile/">{{ user }}</a>!</h3>
+        </div>
+            {% if prf.role == 'director' or acc.is_superuser == 1 or acc.is_staff == 1 %}
                 <div class="container">
                     <form class="list row g-2 col-12" method="get" action="{% url 'main:newuser' %}">
                         <button type="submit" class="btn btn-outline-warning btn-sm" value="confirm" style="max-width: 100px;">Create new user</button>
@@ -68,6 +72,7 @@
                     </form>
                 </div>
                 <br>
+            {% endif %}
                 <div class="container">
                     <form class="list row g-2 col-12" method="get" action="{% url 'main:classrooms' %}">
                         <button type="submit" class="btn btn-outline-warning btn-sm" value="confirm" style="max-width: 100px;">Classrooms</button>

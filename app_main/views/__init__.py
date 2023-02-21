@@ -4,10 +4,13 @@ from .auth import NewUserCreate
 from .auth import UserLogout
 from .auth import UserSignUp
 from .homepage import HomeView
+from .logic import AddNewClassRoom
 from .logic import AllUsersView
 from .logic import ClassesView
 from .logic import ClassRoomEdit
 from .logic import ClassRoomView
+from .logic import DeleteClassroom
+from .logic import EditClassroomNameOrTeacher
 from .logic import UserDeleteView
 from .logic import UserDetailView
 from .logic import UserSearchView
@@ -30,4 +33,7 @@ __all__ = (  # noqa: F405
     "ClassRoomEdit",
     "UserSearchView",
     "UserSearchViewReset",
+    "AddNewClassRoom",
+    "EditClassroomNameOrTeacher",
+    "DeleteClassroom",
 )

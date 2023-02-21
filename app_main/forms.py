@@ -1,5 +1,6 @@
 from django import forms
 
+from app_main.helpers import get_all_teachers_as_choices
 from app_main.helpers import roles
 
 
@@ -16,7 +17,7 @@ class LogInForm(forms.Form):
 
 class NewUserForm(forms.Form):
     username = forms.CharField(
-        label="First name:",
+        label="Username:",
         widget=forms.TextInput(attrs={"class": "form-control"}),
     )
     firstname = forms.CharField(
@@ -30,10 +31,6 @@ class NewUserForm(forms.Form):
     password = forms.CharField(
         label="Password:",
         widget=forms.PasswordInput(attrs={"class": "form-control"}),
-    )
-    email = forms.EmailField(
-        label="Email:",
-        widget=forms.EmailInput(attrs={"class": "form-control"}),
     )
     role = forms.ChoiceField(
         label="Role:",
@@ -48,7 +45,7 @@ class NewUserForm(forms.Form):
 
 class SignUpForm(forms.Form):
     username = forms.CharField(
-        label="First name:",
+        label="Username:",
         widget=forms.TextInput(attrs={"class": "form-control"}),
     )
     firstname = forms.CharField(
@@ -63,7 +60,19 @@ class SignUpForm(forms.Form):
         label="Password:",
         widget=forms.PasswordInput(attrs={"class": "form-control"}),
     )
-    email = forms.EmailField(
-        label="Email:",
-        widget=forms.EmailInput(attrs={"class": "form-control"}),
+
+
+class NewClassRoomForm(forms.Form):
+    name = forms.CharField(
+        label="Name:",
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
+    teacher = forms.ChoiceField(
+        label="Teacher:",
+        choices=get_all_teachers_as_choices,
+        widget=forms.Select(
+            attrs={
+                "class": "form-control",
+            }
+        ),
     )
