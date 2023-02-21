@@ -133,6 +133,8 @@
                 el.innerHTML = '<button class="btn btn-outline-primary btn-lg" disabled style="font-weight: 600; border-width: 2px; font-size: x-large;">' + mark + '</button>';
             }
         </script>
+        {% empty %}
+        <h5>Nothing here yet</h5>
         {% endfor %}
     </div>
     {% endif %}

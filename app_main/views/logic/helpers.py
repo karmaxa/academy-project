@@ -230,7 +230,7 @@ def build_current_student(
     request: http.HttpRequest, user_profile: models.Profile
 ) -> dict:
     classes: dict = {}
-    classrooms = get_user_classrooms(request, "path")
+    classrooms = get_user_classrooms(request, "self")
     for classroom in classrooms:  # type: ignore
         mks = build_student_marks_to_response(user_profile, classroom)
         for lsn in mks:

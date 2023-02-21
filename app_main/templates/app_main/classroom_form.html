@@ -30,6 +30,8 @@
                                 {{student.last_name}}
                             </th>
                         </tr>
+                        {% empty %}
+                        <h5>No student found</h5>
                         {% endfor %}
                     </tbody>
                 </table>

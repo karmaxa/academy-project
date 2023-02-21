@@ -39,6 +39,8 @@
                 <a href="/classes/{{classroom.slug}}/" role="button", class="btn btn_primary" aria-expanded="false" style="border: 1px solid blue; color: blue;">
                     {{classroom.name}}
                 </a>
+                {% empty %}
+                <h5>Nothing here yet</h5>
             {% endfor %}
         </div>
         <br>
@@ -58,6 +60,7 @@
                     <div class="container" style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: wrap;">
                     {% for lesson in classroom.lessons %}
                     <input type="hidden" id="{{current_student.name}}" value="{{current_student}}">
+                    <input type="hidden" id="object_marks" value="{{object.marks}}">
                     <div class="collapse list" id="collapse{{classroom.name}}">
                         <div class="container border border-primary border-2 rounded-3" style="height: 100px; width: 120px; margin: 10px; padding-left: 0;">
                             <h6 class="text-muted" style="margin: 0;">{{lesson.date}}</h6>
@@ -74,8 +77,12 @@
                         stud = document.getElementById(stname).value;
                         stud = stud.replace(/'/g, '"');
                         lesid = "{{lesson.id}}";
+                        marks = document.getElementById("object_marks").value;
+                        marks = marks.replace(/'/g, '"');
+                        marks = JSON.parse(marks);
                         st = JSON.parse(stud);
-                        mark = st[classroomname][lesid];
+                        lessons = marks[classroomname];
+                        mark = lessons[lesid];
                         // if (mark == "NA"){
                         //     mark = "NA";
                         // }
@@ -88,6 +95,8 @@
                     {% endfor %}
                 </div>
                 </li>
+                {% empty %}
+                <h5>Nothing here yet</h5>
                 {% endfor %}
         </ol>
     {% endif %}
