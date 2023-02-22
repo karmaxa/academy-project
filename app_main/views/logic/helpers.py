@@ -79,7 +79,7 @@ def delete_lesson(
 ) -> None:
     lid = request.POST.get("deletelesson")
     student_delete_lesson(classroom, lid)
-    intlid = int(lid) or None  # type: ignore
+    intlid = int(lid) if lid else None
     classroom_delete_lesson(classroom, intlid)
 
 
