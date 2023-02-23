@@ -17,6 +17,7 @@
             <thead>
                 <tr style="vertical-align: middle;">
                     <th scope="col" style="position: -webkit-sticky; position: sticky; width: 140px; z-index: 2; left: 0; background-color: rgba(255, 255, 255, 100);">Students</th>
+                    <th scope="" style="background-color: inherit; font-weight: 600; width: 60px;">Mean</th>
                     {% for lesson in lessons %}
                     <th scope="col" rowspan="2" style="width: 112px; z-index: 2;">
                                 {% if user_role == 'director' %}
@@ -45,6 +46,7 @@
                     <th style="position: -webkit-sticky; position: sticky; width: 100px; z-index: 2; left: 0; background-color: rgba(242,242,242,100);">
                         {{student.name}}
                     </th>
+                    <th scope="" style="background-color: inherit; font-weight: 600;">{{student.mean}}</th>
                     {% for lesson in classroom.lessons %}
                     <input type="hidden" id="{{student.name}}" value="{{student}}">
                     <td style="z-index: 0;">
@@ -108,6 +110,15 @@
     {% elif user_role == 'student' %}
     <h4>{{current_student.name}}</h4>
     <div class="container" style="display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: wrap;">
+        <div class="container border border-success border-2 rounded-3" style="height: 100px; width: 120px; margin: 10px; padding-left: 0;">
+            <h6></h6>
+            <h6 style="margin: 0;">Mean</h6>
+            <div class="container" style="width: 100%; display:flex; justify-content: flex-end;" id="class_{{classroom.id}}_mean">
+                <button class="btn btn-outline-primary btn-lg" disabled style="font-weight: 600; border-width: 2px; font-size: x-large; border-color: green; color: green;">
+                    {{current_student.mean}}
+                </button>
+            </div>
+        </div>
         {% for lesson in lessons %}
         <input type="hidden" id="{{current_student.name}}" value="{{current_student}}">
         <div class="container border border-primary border-2 rounded-3" style="height: 100px; width: 120px; margin: 10px; padding-left: 0;">
@@ -131,7 +142,7 @@
             el = document.getElementById(idd);
             if (mark){
                 el.innerHTML = '<button class="btn btn-outline-primary btn-lg" disabled style="font-weight: 600; border-width: 2px; font-size: x-large;">' + mark + '</button>';
-            }
+            };
         </script>
         {% empty %}
         <h5>Nothing here yet</h5>

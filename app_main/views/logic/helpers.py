@@ -113,15 +113,7 @@ def get_students_to_response(classroom: models.ClassRoom) -> list:
     students: list = []
 
     for stud in profile_students:
-        mks = {
-            str(les["id"]): stud.marks.get(classroom.name, {}).get(
-                str(les["id"])
-            )
-            for les in classroom.lessons
-        }
-        for lsn in mks:
-            if mks[lsn] is None:
-                mks[lsn] = "null"
+        mks = build_student_marks_to_response(stud, classroom)
         students.append(
             {
                 "name": stud.__str__(),
@@ -204,7 +196,30 @@ def build_student_marks_to_response(
         )
         for les in classroom.lessons
     }
+
+    for lsn in mks:
+        if mks[lsn] is None:
+            mks[lsn] = "null"
+
+    marks = get_rid_of_str_marks_and_return_list_of_int_marks(mks)
+    mean = round(sum(marks) / len(marks), 2) if marks else "-"
+    mks["mean"] = mean
+
     return mks
+
+
+def get_rid_of_str_marks_and_return_list_of_int_marks(mks: dict) -> list:
+    mks_vals = list(mks.values())
+    while True:
+        try:
+            mks_vals.remove("")
+        except ValueError:
+            try:
+                mks_vals.remove("NA")
+            except ValueError:
+                break
+    marks = [int(mark) for mark in mks_vals]
+    return marks
 
 
 def get_current_student(
@@ -217,8 +232,7 @@ def get_current_student(
         return None
 
     if not classroom:
-        current_student = build_current_student(request, user_profile)
-
+        current_student = build_current_student(request, user_profile, "path")
     else:
         current_student = build_classroom_current_student(
             classroom, user_profile
@@ -227,10 +241,10 @@ def get_current_student(
 
 
 def build_current_student(
-    request: http.HttpRequest, user_profile: models.Profile
+    request: http.HttpRequest, user_profile: models.Profile, param: str
 ) -> dict:
     classes: dict = {}
-    classrooms = get_user_classrooms(request, "self")
+    classrooms = get_user_classrooms(request, param)
     for classroom in classrooms:  # type: ignore
         mks = build_student_marks_to_response(user_profile, classroom)
         for lsn in mks:
@@ -263,13 +277,16 @@ def get_user_classrooms(
 ) -> Optional[QuerySet]:
     profile = get_user_profile(request, param)
     urole = profile.role
-    upk = profile.user.id
+    upk = profile.user_id
     if urole == "teacher" or urole == "director":
-        classrooms = models.ClassRoom.objects.filter(teacher__id=upk)
+        classrooms = models.ClassRoom.objects.filter(
+            teacher__id=upk  # type: ignore
+        )
     elif urole == "student":
-        classrooms = models.ClassRoom.objects.filter(student__id=upk)
+        list_classrooms = list(profile.marks.keys())
+        classrooms = models.ClassRoom.objects.filter(name__in=list_classrooms)
     else:
-        classrooms = None
+        classrooms = models.ClassRoom.objects.none()
     return classrooms
 
 

@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model
 from django.contrib.auth import login
 from django.contrib.auth import logout
+from django.core.exceptions import ObjectDoesNotExist
 from django.views import generic
 
 from app_main.forms import LogInForm
@@ -94,6 +95,15 @@ class UserSignUp(generic.FormView):
             form.cleaned_data["lastname"],
             form.cleaned_data["password"],
         )
+        try:
+            _ = User.objects.get(username=username)
+            messages.warning(
+                self.request,
+                "this user name already exists",
+            )
+            return self.form_invalid(form)
+        except ObjectDoesNotExist:
+            pass
         user = User.objects.create_user(username, "", password)
         user.first_name, user.last_name = firstname, lastname
         user.save()
@@ -122,6 +132,15 @@ class NewUserCreate(LRMixin, RoleUPTMixin, generic.FormView):
             form.cleaned_data["password"],
             form.cleaned_data["role"],
         )
+        try:
+            _ = User.objects.get(username=username)
+            messages.warning(
+                self.request,
+                "this user name already exists",
+            )
+            return self.form_invalid(form)
+        except ObjectDoesNotExist:
+            pass
         user = User.objects.create_user(username, "", password)
         user.first_name, user.last_name = firstname, lastname
         user.save()

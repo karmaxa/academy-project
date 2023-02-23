@@ -62,6 +62,7 @@ class ClassRoom(models.Model):
     name: Any = models.TextField(
         blank=True,
         null=True,
+        unique=True,
     )
     teacher: Any = models.ForeignKey(
         User,
