@@ -60,10 +60,9 @@ def edit_classroom(
 
     for lesson in classroom.lessons:
         lid = lesson["id"]
-        ltitle = lesson["title"]
-        newltitle = request.POST.get(f"{ltitle}_title")
+        newltitle = request.POST.get(f"{lid}_title")
         lesson["title"] = newltitle
-        lesson["date"] = request.POST.get(f"{ltitle}_date")
+        lesson["date"] = request.POST.get(f"{lid}_date")
         for student in students:
             marks = student.marks
             marks_current_class = marks.get(classroom.name)
@@ -232,7 +231,7 @@ def get_current_student(
         return None
 
     if not classroom:
-        current_student = build_current_student(request, user_profile, "path")
+        current_student = build_current_student(request, user_profile, par)
     else:
         current_student = build_classroom_current_student(
             classroom, user_profile

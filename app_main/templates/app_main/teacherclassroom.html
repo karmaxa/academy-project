@@ -21,12 +21,12 @@
                     {% for lesson in lessons %}
                     <th scope="col" rowspan="2" style="width: 112px; z-index: 2;">
                                 {% if user_role == 'director' %}
-                                <input type="date" class="form-control form-control-sm date" name="{{lesson.title}}_date" value="{{lesson.dateform}}" style="background-color: inherit; font-weight: 600;">
-                                <input type="text" class="form-control form-control-sm" name="{{lesson.title}}_title" value="{{lesson.title}}" style="background-color: inherit; font-weight: 600;">
+                                <input type="date" class="form-control form-control-sm date" name="{{lesson.id}}_date" value="{{lesson.dateform}}" style="background-color: inherit; font-weight: 600;">
+                                <input type="text" class="form-control form-control-sm" name="{{lesson.id}}_title" value="{{lesson.title}}" style="background-color: inherit; font-weight: 600;">
                                 <button type="submit" class="btn btn-outline-danger btn-sm" name="deletelesson" value="{{lesson.id}}" style="font-weight: 600;">Delete lesson</button>
                                 {% else %}
-                                <input type="text" class="form-control form-control-sm" name="{{lesson.title}}_date" value="{{lesson.date}}" disabled style="width: 100px; font-weight: 600;">
-                                <input type="text" class="form-control form-control-sm" name="{{lesson.title}}_title" value="{{lesson.title}}" disabled style="font-weight: 600;">
+                                <input type="text" class="form-control form-control-sm" name="{{lesson.id}}_date" value="{{lesson.date}}" disabled style="width: 100px; font-weight: 600;">
+                                <input type="text" class="form-control form-control-sm" name="{{lesson.id}}_title" value="{{lesson.title}}" disabled style="font-weight: 600;">
                                 {% endif %}
                     </th>
                     {% endfor %}
