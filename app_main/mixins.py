@@ -100,4 +100,7 @@ class ProfileSingleObjectMixin(LRMixin, SingleObjectMixin):
                 self.request, None, "self"  # type: ignore
             )
             ctx["current_student"] = current_student
+            ctx["email"] = (
+                self.object.email if self.object.email else ""  # type: ignore
+            )
         return ctx

@@ -172,6 +172,7 @@ def get_user_profile(  # noqa: CCR001
                 role=role,
             )
             uprof.save()
+            uprof = models.Profile.objects.get(user_id=upk)  # type: ignore
     if param == "path":
         profile_pk = request.resolver_match.kwargs.get("pk")  # type: ignore
         uprof = models.Profile.objects.get(id=profile_pk)  # type: ignore
