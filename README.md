@@ -1,5 +1,6 @@
 # academy-project
 IT Academy graduation Python project
+
 This is a web app for small education services helping management of students students' academic performance.
 
 
