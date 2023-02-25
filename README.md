@@ -35,3 +35,6 @@ student, teacher, director.
 -Director may see any classroom and commit changes in them, delete and create new ones; Create, view, delete and edit users and their permissions.
 
 -By default any user when is signed up gains role of student. When user account is created by director any role is allowed.
+
+
+If you want to change set of available grades, edit app_main.helpers.marks list.
