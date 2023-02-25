@@ -39,3 +39,10 @@ student, teacher, director.
 
 
 If you want to change set of available grades, edit app_main.helpers.marks list.
+
+
+Languages: Python, HTML, CSS, JavaScript.
+
+Frameworks: Django, Bootstrap.
+
+Database: SQLite3
