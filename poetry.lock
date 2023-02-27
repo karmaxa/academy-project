@@ -2659,14 +2659,14 @@ test = ["argcomplete (>=2.0)", "pre-commit", "pytest", "pytest-mock"]
 
 [[package]]
 name = "types-dj-database-url"
-version = "1.2.0.0"
+version = "1.2.0.1"
 description = "Typing stubs for dj-database-url"
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "types-dj-database-url-1.2.0.0.tar.gz", hash = "sha256:dfbdac34e5ff57e6dfb07ada7326331711757bbe3a1772f576e32834c16ce04e"},
-    {file = "types_dj_database_url-1.2.0.0-py3-none-any.whl", hash = "sha256:558a44f55d5cba4cfdf4d8ec0fc813ece7ad75a73ea269866aa385ef4c8c4992"},
+    {file = "types-dj-database-url-1.2.0.1.tar.gz", hash = "sha256:ffeb257f916779398ac5385a15840fcfca780a5d70420012251fa8ca680e54ed"},
+    {file = "types_dj_database_url-1.2.0.1-py3-none-any.whl", hash = "sha256:20edc5162ce27f0f1e99d9b21f3763b5de33a1b6ca2628585af5c36e4c526ad6"},
 ]
 
 [[package]]
@@ -3060,4 +3060,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "13b5b9024a51a1a4bfb33ebfa334eff744058d48129133c7ba8ec09906a5c1e7"
+content-hash = "6f4dfc350abde4534d19a78fd7cada18bd46cc1385de93854777334e29c160f0"
