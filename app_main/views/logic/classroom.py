@@ -162,15 +162,16 @@ class EditClassroomNameOrTeacher(LRMixin, RoleUPTMixin, generic.FormView):
         classroom = models.ClassRoom.objects.get(slug=form.data["slug"])
         old_classroom_name = classroom.name[:]
         name = form.data["name"]
-        try:
-            _ = models.ClassRoom.objects.get(name=name)
+        all_classroom_names = [
+            obj.name for obj in models.ClassRoom.objects.all()
+        ]
+        all_classroom_names.remove(old_classroom_name)
+        if name in all_classroom_names:
             messages.warning(
                 self.request,
                 "this classroom name already exists",
             )
             return super().form_invalid(form)
-        except ObjectDoesNotExist:
-            pass
         teacher_id = form.data["teacher"]
         classroom.name = name
         classroom.slug = name
