@@ -6,7 +6,7 @@ authors = ["Mikita Karmanaw mikita.karmanaw@gmail.com"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-aiohttp = "^3.8.4"
+aiohttp = "^3.8.5"
 anyio = "^3.6.2"
 black = "^23.1.0"
 devtools = {extras = ["pygments"], version = "^0.10.0"}
